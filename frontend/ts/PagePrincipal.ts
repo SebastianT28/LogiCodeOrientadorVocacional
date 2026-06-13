@@ -53,7 +53,7 @@ document.addEventListener('DOMContentLoaded', (): void => {
 
     const toggleMenu = (): void => {
         if (!mobileMenu || !menuIcon) return;
-        
+
         isMenuOpen = !isMenuOpen;
         if (isMenuOpen) {
             // Abrir
