@@ -1,18 +1,37 @@
 "use client";
 
+import { useParams } from "next/navigation";
 import { useState } from "react";
 import Link from "next/link";
 import categoriasData from "@/data/categorias.json";
 import carrerasData from "@/data/carreras.json";
 
-export default function CarrerasPage() {
-    const [selectedCategory, setSelectedCategory] = useState<number | "Todas">("Todas");
+export default function CategoryPage() {
+    const params = useParams();
     const [selectedSucursal, setSelectedSucursal] = useState<string>("Todas");
     const [isMenuOpen, setIsMenuOpen] = useState(false);
+    
+    // Parse the ID from params
+    const categoryId = params?.id ? parseInt(params.id as string, 10) : null;
+    
+    // Find the current category
+    const category = categoriasData.find(cat => cat.id === categoryId);
 
-    // Filter careers by both category and sucursal
+    if (!category) {
+        return (
+            <div className="min-h-screen flex flex-col items-center justify-center bg-slateLight px-4 text-center">
+                <h1 className="text-4xl font-extrabold text-charcoal mb-4 font-serif">Categoría no encontrada</h1>
+                <p className="text-gray-500 mb-8 max-w-md">La categoría especificada no existe en nuestro registro de áreas de conocimiento.</p>
+                <Link href="/" className="bg-utpRed hover:bg-utpDarkRed text-white font-semibold px-6 py-3 rounded-full transition-colors">
+                    Volver al inicio
+                </Link>
+            </div>
+        );
+    }
+
+    // Filter careers by category and selected sucursal
     const filteredCareers = carrerasData.filter(carrera => {
-        const matchesCategory = selectedCategory === "Todas" || carrera.categoriaId === selectedCategory;
+        const matchesCategory = carrera.categoriaId === category.id;
         const matchesSucursal = selectedSucursal === "Todas" || carrera.sucursales.includes(selectedSucursal);
         return matchesCategory && matchesSucursal;
     });
@@ -86,180 +105,165 @@ export default function CarrerasPage() {
 
             {/* Main Content */}
             <main className="flex-grow pt-20">
-                {/* Hero Banner */}
-                <section className="relative bg-charcoal py-20 overflow-hidden text-center">
-                    <div className="absolute top-0 right-0 w-80 h-80 bg-red-900/10 rounded-full blur-3xl pointer-events-none"></div>
-                    <div className="absolute bottom-0 left-0 w-80 h-80 bg-blue-900/5 rounded-full blur-3xl pointer-events-none"></div>
-                    
-                    <div className="relative z-10 max-w-4xl mx-auto px-6">
-                        <p className="text-xs md:text-sm font-semibold tracking-widest text-red-500 uppercase mb-3">CATÁLOGO COMPLETO</p>
-                        <h1 className="text-4xl md:text-6xl font-black text-white font-serif mb-6 leading-tight">
-                            Explora nuestras Carreras
+                {/* Category Hero Banner */}
+                <section className="relative h-64 md:h-80 bg-charcoal overflow-hidden">
+                    <div className="absolute inset-0 bg-gradient-to-r from-black/90 via-black/60 to-black/30 z-10"></div>
+                    <img 
+                        src={category.imagen} 
+                        alt={category.nombre}
+                        className="absolute inset-0 w-full h-full object-cover object-center" 
+                    />
+                    <div className="relative z-20 max-w-7xl mx-auto px-6 lg:px-8 h-full flex flex-col justify-center text-white">
+                        <div className="flex items-center gap-2 text-xs md:text-sm font-semibold text-red-400 uppercase tracking-widest mb-3">
+                            <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2.5">
+                                <path strokeLinecap="round" strokeLinejoin="round" d={category.svgPath} />
+                            </svg>
+                            Área de Conocimiento
+                        </div>
+                        <h1 className="text-3xl md:text-5xl lg:text-6xl font-black font-serif leading-tight mb-3 tracking-wide">
+                            {category.nombre}
                         </h1>
-                        <p className="text-gray-300 text-sm md:text-base max-w-2xl mx-auto font-light leading-relaxed">
-                            Filtra por área de interés o sede y encuentra el programa académico que mejor se adapte a tu perfil y aspiraciones.
+                        <p className="text-gray-300 text-sm md:text-base max-w-2xl font-light leading-relaxed">
+                            Explora nuestras carreras profesionales acreditadas en {category.nombre}. Descubre tu vocación y diseña tu futuro académico.
                         </p>
                     </div>
                 </section>
 
-                {/* Filter and Grid Section */}
+                {/* Filters and Careers Grid Section */}
                 <section className="max-w-7xl mx-auto px-6 lg:px-8 py-12 md:py-16">
-                    {/* Filters Bar */}
-                    <div className="bg-white rounded-3xl p-6 md:p-8 shadow-sm border border-gray-100 mb-10 flex flex-col gap-6">
-                        {/* Category filter */}
-                        <div>
-                            <div className="text-sm font-bold text-gray-700 mb-3 uppercase tracking-wider">
-                                Filtrar por Área de Interés:
-                            </div>
-                            <div className="flex flex-wrap gap-2">
-                                <button
-                                    onClick={() => setSelectedCategory("Todas")}
-                                    className={`px-4 py-2.5 rounded-xl text-xs font-semibold tracking-wide transition-all cursor-pointer ${
-                                        selectedCategory === "Todas"
-                                            ? "bg-utpRed text-white shadow-md shadow-red-500/20"
-                                            : "bg-gray-50 border border-gray-200 text-gray-600 hover:bg-gray-100"
-                                    }`}
-                                >
-                                    Todas las áreas
-                                </button>
+                    <div className="flex flex-col lg:flex-row gap-8 items-start">
+                        
+                        {/* Sidebar: Navigation to other Categories */}
+                        <aside className="w-full lg:w-64 bg-white rounded-2xl p-6 shadow-sm border border-gray-100 flex-shrink-0">
+                            <h3 className="text-sm font-bold text-gray-500 uppercase tracking-wider mb-4 border-b border-gray-100 pb-2">
+                                Otras Áreas
+                            </h3>
+                            <div className="flex flex-col space-y-1">
                                 {categoriasData.map((cat) => {
-                                    const isActive = selectedCategory === cat.id;
+                                    const isCurrent = cat.id === category.id;
                                     return (
-                                        <button
+                                        <Link
                                             key={cat.id}
-                                            onClick={() => setSelectedCategory(cat.id)}
-                                            className={`px-4 py-2.5 rounded-xl text-xs font-semibold tracking-wide transition-all flex items-center gap-2 cursor-pointer ${
-                                                isActive
-                                                    ? "bg-utpRed text-white shadow-md shadow-red-500/20"
-                                                    : "bg-gray-50 border border-gray-200 text-gray-600 hover:bg-gray-100"
+                                            href={`/carreras/categoria/${cat.id}`}
+                                            className={`flex items-center justify-between px-3 py-2.5 rounded-lg text-sm font-medium transition-all ${
+                                                isCurrent
+                                                    ? "bg-red-50 text-utpRed font-semibold"
+                                                    : "text-gray-600 hover:bg-gray-50 hover:text-gray-900"
                                             }`}
                                         >
-                                            <svg className={`w-3.5 h-3.5 ${isActive ? "text-white" : "text-gray-400"}`} fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2.5">
-                                                <path strokeLinecap="round" strokeLinejoin="round" d={cat.svgPath} />
+                                            <span className="flex items-center gap-2 truncate">
+                                                <svg className={`w-4 h-4 flex-shrink-0 ${isCurrent ? "text-utpRed" : "text-gray-400"}`} fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2">
+                                                    <path strokeLinecap="round" strokeLinejoin="round" d={cat.svgPath} />
+                                                </svg>
+                                                {cat.nombre}
+                                            </span>
+                                            <svg className="w-4 h-4 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 5l7 7-7 7" />
                                             </svg>
-                                            {cat.nombre}
-                                        </button>
+                                        </Link>
                                     );
                                 })}
                             </div>
-                        </div>
+                        </aside>
 
-                        <hr className="border-gray-100" />
-
-                        {/* Branch filter */}
-                        <div>
-                            <div className="text-sm font-bold text-gray-700 mb-3 uppercase tracking-wider">
-                                Filtrar por Sede (Sucursal):
+                        {/* Main Grid Area */}
+                        <div className="flex-grow w-full">
+                            {/* Branch/Sucursal Filter Bar */}
+                            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 bg-white p-4 rounded-2xl shadow-sm border border-gray-100 mb-8">
+                                <div className="text-sm font-semibold text-gray-700">
+                                    Filtrar por Sucursal:
+                                </div>
+                                <div className="flex flex-wrap gap-2">
+                                    {["Todas", "Lima", "Arequipa"].map((sucursal) => {
+                                        const isActive = selectedSucursal === sucursal;
+                                        return (
+                                            <button
+                                                key={sucursal}
+                                                onClick={() => setSelectedSucursal(sucursal)}
+                                                className={`px-4 py-2 rounded-full text-xs font-semibold tracking-wide transition-all cursor-pointer ${
+                                                    isActive
+                                                        ? "bg-utpRed text-white shadow-md shadow-red-500/20"
+                                                        : "bg-gray-50 border border-gray-200 text-gray-600 hover:bg-gray-100"
+                                                }`}
+                                            >
+                                                {sucursal === "Todas" ? "Todas las sedes" : `Sede ${sucursal}`}
+                                            </button>
+                                        );
+                                    })}
+                                </div>
                             </div>
-                            <div className="flex flex-wrap gap-2">
-                                {["Todas", "Lima", "Arequipa"].map((sucursal) => {
-                                    const isActive = selectedSucursal === sucursal;
-                                    return (
-                                        <button
-                                            key={sucursal}
-                                            onClick={() => setSelectedSucursal(sucursal)}
-                                            className={`px-4 py-2.5 rounded-xl text-xs font-semibold tracking-wide transition-all cursor-pointer ${
-                                                isActive
-                                                    ? "bg-utpRed text-white shadow-md shadow-red-500/20"
-                                                    : "bg-gray-50 border border-gray-200 text-gray-600 hover:bg-gray-100"
-                                            }`}
+
+                            {/* Grid of Careers */}
+                            {filteredCareers.length > 0 ? (
+                                <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
+                                    {filteredCareers.map((carrera) => (
+                                        <div
+                                            key={carrera.id}
+                                            id={`career-card-${carrera.id}`}
+                                            className="group bg-white rounded-2xl overflow-hidden shadow-sm border border-gray-100 hover:shadow-lg hover:border-gray-200/80 transition-all duration-300 flex flex-col h-full"
                                         >
-                                            {sucursal === "Todas" ? "Todas las sedes" : `Sede ${sucursal}`}
-                                        </button>
-                                    );
-                                })}
-                            </div>
+                                            {/* Career Image Container */}
+                                            <div className="relative h-48 overflow-hidden bg-gray-100">
+                                                <img
+                                                    id={`career-img-${carrera.id}`}
+                                                    src={carrera.imagen}
+                                                    alt={carrera.nombre}
+                                                    className="w-full h-full object-cover transform scale-100 transition-transform duration-700 group-hover:scale-105"
+                                                />
+                                                <div className="absolute top-4 right-4 flex gap-1.5 flex-wrap">
+                                                    {carrera.sucursales.map((suc) => (
+                                                        <span
+                                                            key={suc}
+                                                            className="bg-black/60 backdrop-blur-md text-white text-[10px] font-bold px-2.5 py-1 rounded-full uppercase tracking-wider"
+                                                        >
+                                                            Sede {suc}
+                                                        </span>
+                                                    ))}
+                                                </div>
+                                            </div>
+
+                                            {/* Career Content */}
+                                            <div className="p-6 flex flex-col flex-grow">
+                                                <h3 className="text-lg font-bold text-gray-900 font-serif mb-2.5 group-hover:text-utpRed transition-colors">
+                                                    {carrera.nombre}
+                                                </h3>
+                                                <p className="text-gray-500 text-xs md:text-sm leading-relaxed mb-6 font-light flex-grow">
+                                                    {carrera.descripcion}
+                                                </p>
+                                                <div className="border-t border-gray-100 pt-4 mt-auto flex items-center justify-between">
+                                                    <span className="text-[11px] font-bold text-gray-400 uppercase tracking-wider">
+                                                        Duración: 5 años
+                                                    </span>
+                                                    <Link 
+                                                        href={`/carreras/carrera/${carrera.id}`}
+                                                        className="inline-flex items-center text-xs font-bold text-utpRed hover:text-utpDarkRed transition-colors cursor-pointer group/btn"
+                                                    >
+                                                        Conocer más
+                                                        <svg className="w-3.5 h-3.5 ml-1 transition-transform duration-300 group-hover/btn:translate-x-1" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2.5">
+                                                            <path strokeLinecap="round" strokeLinejoin="round" d="M9 5l7 7-7 7" />
+                                                        </svg>
+                                                    </Link>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    ))}
+                                </div>
+                            ) : (
+                                /* Empty State */
+                                <div className="bg-white rounded-2xl py-16 px-6 text-center border border-gray-100 shadow-sm flex flex-col items-center justify-center">
+                                    <div className="p-4 bg-red-50 rounded-full text-utpRed mb-4">
+                                        <svg className="w-8 h-8" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2">
+                                            <path strokeLinecap="round" strokeLinejoin="round" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+                                        </svg>
+                                    </div>
+                                    <h4 className="text-lg font-bold text-gray-900 mb-1">Sin carreras disponibles</h4>
+                                    <p className="text-gray-500 text-sm max-w-sm leading-relaxed">
+                                        No encontramos carreras en <strong>{category.nombre}</strong> disponibles para la <strong>Sede {selectedSucursal}</strong>. Intenta cambiar de sede o explorar otras áreas.
+                                    </p>
+                                </div>
+                            )}
                         </div>
                     </div>
-
-                    {/* Careers Grid */}
-                    {filteredCareers.length > 0 ? (
-                        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-                            {filteredCareers.map((carrera) => {
-                                const categoryInfo = categoriasData.find(cat => cat.id === carrera.categoriaId);
-                                return (
-                                    <div
-                                        key={carrera.id}
-                                        id={`career-card-${carrera.id}`}
-                                        className="group bg-white rounded-2xl overflow-hidden shadow-sm border border-gray-100 hover:shadow-lg hover:border-gray-200/80 transition-all duration-300 flex flex-col h-full"
-                                    >
-                                        {/* Image */}
-                                        <div className="relative h-48 overflow-hidden bg-gray-100">
-                                            <img
-                                                id={`career-img-${carrera.id}`}
-                                                src={carrera.imagen}
-                                                alt={carrera.nombre}
-                                                className="w-full h-full object-cover transform scale-100 transition-transform duration-700 group-hover:scale-105"
-                                            />
-                                            {/* Sede tags */}
-                                            <div className="absolute top-4 right-4 flex gap-1.5 flex-wrap">
-                                                {carrera.sucursales.map((suc) => (
-                                                    <span
-                                                        key={suc}
-                                                        className="bg-black/60 backdrop-blur-md text-white text-[10px] font-bold px-2.5 py-1 rounded-full uppercase tracking-wider"
-                                                    >
-                                                        Sede {suc}
-                                                    </span>
-                                                ))}
-                                            </div>
-                                            {/* Category Tag on Image */}
-                                            {categoryInfo && (
-                                                <div className="absolute bottom-4 left-4 bg-white/90 backdrop-blur-md text-gray-800 text-[10px] font-bold px-3 py-1.5 rounded-lg flex items-center gap-1">
-                                                    <svg className="w-3.5 h-3.5 text-utpRed" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2.5">
-                                                        <path strokeLinecap="round" strokeLinejoin="round" d={categoryInfo.svgPath} />
-                                                    </svg>
-                                                    {categoryInfo.nombre}
-                                                </div>
-                                            )}
-                                        </div>
-
-                                        {/* Content */}
-                                        <div className="p-6 flex flex-col flex-grow">
-                                            <h3 className="text-lg font-bold text-gray-900 font-serif mb-2.5 group-hover:text-utpRed transition-colors">
-                                                {carrera.nombre}
-                                            </h3>
-                                            <p className="text-gray-500 text-xs md:text-sm leading-relaxed mb-6 font-light flex-grow">
-                                                {carrera.descripcion}
-                                            </p>
-                                            <div className="border-t border-gray-100 pt-4 mt-auto flex items-center justify-between">
-                                                <span className="text-[11px] font-bold text-gray-400 uppercase tracking-wider">
-                                                    Duración: 5 años
-                                                </span>
-                                                <Link
-                                                    href={`/carreras/carrera/${carrera.id}`}
-                                                    className="inline-flex items-center text-xs font-bold text-utpRed hover:text-utpDarkRed transition-colors cursor-pointer group/btn"
-                                                >
-                                                    Conocer más
-                                                    <svg className="w-3.5 h-3.5 ml-1 transition-transform duration-300 group-hover/btn:translate-x-1" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2.5">
-                                                        <path strokeLinecap="round" strokeLinejoin="round" d="M9 5l7 7-7 7" />
-                                                    </svg>
-                                                </Link>
-                                            </div>
-                                        </div>
-                                    </div>
-                                );
-                            })}
-                        </div>
-                    ) : (
-                        /* Empty State */
-                        <div className="bg-white rounded-3xl py-20 px-6 text-center border border-gray-100 shadow-sm flex flex-col items-center justify-center">
-                            <div className="p-4 bg-red-50 rounded-full text-utpRed mb-4">
-                                <svg className="w-8 h-8" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2">
-                                    <path strokeLinecap="round" strokeLinejoin="round" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
-                                </svg>
-                            </div>
-                            <h4 className="text-xl font-bold text-gray-900 mb-2">No se encontraron resultados</h4>
-                            <p className="text-gray-500 text-sm max-w-sm leading-relaxed mb-6">
-                                Intenta seleccionar otra sede u otra área de conocimiento.
-                            </p>
-                            <button
-                                onClick={() => { setSelectedCategory("Todas"); setSelectedSucursal("Todas"); }}
-                                className="bg-utpRed hover:bg-utpDarkRed text-white text-xs font-bold px-6 py-3 rounded-full transition-colors cursor-pointer shadow-md"
-                            >
-                                Limpiar Filtros
-                            </button>
-                        </div>
-                    )}
                 </section>
             </main>
 
