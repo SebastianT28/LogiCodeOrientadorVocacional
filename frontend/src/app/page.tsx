@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
+import Chatbot from "@/components/Chatbot";
 
 export default function Page() {
     const [isScrolled, setIsScrolled] = useState(false);
@@ -433,6 +434,9 @@ export default function Page() {
                     </div>
                 </div>
             </footer>
+            
+            {/* CHATBOT IA */}
+            <Chatbot />
         </>
     );
 }
