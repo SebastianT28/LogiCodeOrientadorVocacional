@@ -1,11 +1,16 @@
 "use client";
 
 import { useState, useEffect } from "react";
+import categoriasData from "@/data/categorias.json";
 
 export default function Page() {
     const [isScrolled, setIsScrolled] = useState(false);
     const [isMenuOpen, setIsMenuOpen] = useState(false);
     const [openFaqIndex, setOpenFaqIndex] = useState<number | null>(null);
+
+    const handleCategoryClick = (id: number) => {
+        window.open(`/carreras/categoria/${id}`, "_blank");
+    };
 
     useEffect(() => {
         const updateHeaderStyles = () => {
@@ -205,70 +210,32 @@ export default function Page() {
                     </div>
 
                     <div className="grid grid-cols-1 md:grid-cols-3 gap-6 lg:gap-8">
-                        <div className="group relative h-64 rounded-2xl overflow-hidden shadow-md cursor-pointer hover-zoom hover:shadow-xl transition-all duration-300">
-                            <div className="absolute inset-0 bg-gradient-to-t from-black/95 via-black/45 to-transparent z-10 transition-opacity duration-300 group-hover:opacity-90"></div>
-                            <img src="https://images.unsplash.com/photo-1518770660439-4636190af475?auto=format&fit=crop&q=80&w=600" alt="Circuito integrado electrónico de tecnología avanzada" className="w-full h-full object-cover" />
-                            <div className="absolute bottom-6 left-6 z-20 flex items-center text-white font-bold text-lg tracking-wide">
-                                <svg className="w-5 h-5 mr-2.5 text-red-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2.5">
-                                    <path strokeLinecap="round" strokeLinejoin="round" d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4" />
-                                </svg>
-                                Ingeniería & Tecnología
+                        {categoriasData.map((cat) => (
+                            <div
+                                key={cat.id}
+                                id={`category-card-${cat.id}`}
+                                onClick={() => handleCategoryClick(cat.id)}
+                                className="group relative h-64 rounded-2xl overflow-hidden shadow-md cursor-pointer hover-zoom hover:shadow-xl transition-all duration-300"
+                            >
+                                <div className="absolute inset-0 bg-gradient-to-t from-black/95 via-black/45 to-transparent z-10 transition-opacity duration-300 group-hover:opacity-90"></div>
+                                <img
+                                    id={`category-img-${cat.id}`}
+                                    src={cat.imagen}
+                                    alt={cat.nombre}
+                                    className="w-full h-full object-cover"
+                                />
+                                <div className="absolute bottom-6 left-6 z-20 flex items-center text-white font-bold text-lg tracking-wide">
+                                    <svg className="w-5 h-5 mr-2.5 text-red-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2.5">
+                                        <path strokeLinecap="round" strokeLinejoin="round" d={cat.svgPath} />
+                                    </svg>
+                                    {cat.nombre}
+                                </div>
                             </div>
-                        </div>
-                        <div className="group relative h-64 rounded-2xl overflow-hidden shadow-md cursor-pointer hover-zoom hover:shadow-xl transition-all duration-300">
-                            <div className="absolute inset-0 bg-gradient-to-t from-black/95 via-black/45 to-transparent z-10 transition-opacity duration-300 group-hover:opacity-90"></div>
-                            <img src="https://images.unsplash.com/photo-1505751172876-fa1923c5c528?auto=format&fit=crop&q=80&w=600" alt="Doctor con estetoscopio trabajando en laptop" className="w-full h-full object-cover" />
-                            <div className="absolute bottom-6 left-6 z-20 flex items-center text-white font-bold text-lg tracking-wide">
-                                <svg className="w-5 h-5 mr-2.5 text-red-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2.5">
-                                    <path strokeLinecap="round" strokeLinejoin="round" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
-                                </svg>
-                                Ciencias de la Salud
-                            </div>
-                        </div>
-                        <div className="group relative h-64 rounded-2xl overflow-hidden shadow-md cursor-pointer hover-zoom hover:shadow-xl transition-all duration-300">
-                            <div className="absolute inset-0 bg-gradient-to-t from-black/95 via-black/45 to-transparent z-10 transition-opacity duration-300 group-hover:opacity-90"></div>
-                            <img src="https://images.unsplash.com/photo-1529156069898-49953e39b3ac?auto=format&fit=crop&q=80&w=600" alt="Grupo de estudiantes sentados abrazados viendo el atardecer" className="w-full h-full object-cover" />
-                            <div className="absolute bottom-6 left-6 z-20 flex items-center text-white font-bold text-lg tracking-wide">
-                                <svg className="w-5 h-5 mr-2.5 text-red-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2.5">
-                                    <path strokeLinecap="round" strokeLinejoin="round" d="M21 12a9 9 0 01-9 9m9-9a9 9 0 00-9-9m9 9H3m9 9a9 9 0 01-9-9m9 9c1.657 0 3-4.03 3-9s-1.343-9-3-9m0 18c-1.657 0-3-4.03-3-9s1.343-9 3-9m-9 9a9 9 0 019-9" />
-                                </svg>
-                                Ciencias Sociales
-                            </div>
-                        </div>
-                        <div className="group relative h-64 rounded-2xl overflow-hidden shadow-md cursor-pointer hover-zoom hover:shadow-xl transition-all duration-300">
-                            <div className="absolute inset-0 bg-gradient-to-t from-black/95 via-black/45 to-transparent z-10 transition-opacity duration-300 group-hover:opacity-90"></div>
-                            <img src="https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?auto=format&fit=crop&q=80&w=600" alt="Profesionales analizando reportes financieros en escritorio" className="w-full h-full object-cover" />
-                            <div className="absolute bottom-6 left-6 z-20 flex items-center text-white font-bold text-lg tracking-wide">
-                                <svg className="w-5 h-5 mr-2.5 text-red-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2.5">
-                                    <path strokeLinecap="round" strokeLinejoin="round" d="M21 13.255A23.931 23.931 0 0112 15c-3.183 0-6.22-.62-9-1.745M16 6V4a2 2 0 00-2-2h-4a2 2 0 00-2 2v2m4 6h.01M5 20h14a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
-                                </svg>
-                                Negocios & Administración
-                            </div>
-                        </div>
-                        <div className="group relative h-64 rounded-2xl overflow-hidden shadow-md cursor-pointer hover-zoom hover:shadow-xl transition-all duration-300">
-                            <div className="absolute inset-0 bg-gradient-to-t from-black/95 via-black/45 to-transparent z-10 transition-opacity duration-300 group-hover:opacity-90"></div>
-                            <img src="https://images.unsplash.com/photo-1460661419201-fd4cecdf8a8b?auto=format&fit=crop&q=80&w=600" alt="Pinceles, pinturas acrílicas y herramientas creativas de arte" className="w-full h-full object-cover" />
-                            <div className="absolute bottom-6 left-6 z-20 flex items-center text-white font-bold text-lg tracking-wide">
-                                <svg className="w-5 h-5 mr-2.5 text-red-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2.5">
-                                    <path strokeLinecap="round" strokeLinejoin="round" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z" />
-                                </svg>
-                                Arte & Humanidades
-                            </div>
-                        </div>
-                        <div className="group relative h-64 rounded-2xl overflow-hidden shadow-md cursor-pointer hover-zoom hover:shadow-xl transition-all duration-300">
-                            <div className="absolute inset-0 bg-gradient-to-t from-black/95 via-black/45 to-transparent z-10 transition-opacity duration-300 group-hover:opacity-90"></div>
-                            <img src="https://images.unsplash.com/photo-1635070041078-e363dbe005cb?auto=format&fit=crop&q=80&w=600" alt="Fórmula matemática escrita en pizarra o frasco de química" className="w-full h-full object-cover" />
-                            <div className="absolute bottom-6 left-6 z-20 flex items-center text-white font-bold text-lg tracking-wide">
-                                <svg className="w-5 h-5 mr-2.5 text-red-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2.5">
-                                    <path strokeLinecap="round" strokeLinejoin="round" d="M19.428 15.428a2 2 0 00-1.022-.547l-2.387-.477a6 6 0 00-3.86.517l-.318.158a6 6 0 01-3.86.517L6.05 15.21a2 2 0 00-1.806.547M8 4h8l-1 1v5.172a2 2 0 00.586 1.414l5 5c1.26 1.26.367 3.414-1.415 3.414H4.828c-1.782 0-2.674-2.154-1.414-3.414l5-5A2 2 0 009 10.172V5L8 4z" />
-                                </svg>
-                                Ciencias Exactas
-                            </div>
-                        </div>
+                        ))}
                     </div>
 
                     <div className="flex justify-center mt-14">
-                        <a href="#carreras" className="inline-flex items-center justify-center bg-utpRed hover:bg-utpDarkRed text-white px-8 py-3.5 rounded-lg text-sm font-semibold shadow-md hover:shadow-lg transition-all duration-300 hover:scale-105">
+                        <a href="/carreras" className="inline-flex items-center justify-center bg-utpRed hover:bg-utpDarkRed text-white px-8 py-3.5 rounded-lg text-sm font-semibold shadow-md hover:shadow-lg transition-all duration-300 hover:scale-105">
                             Explorar todas las carreras +
                         </a>
                     </div>
