@@ -10,10 +10,10 @@ export default function CategoryPage() {
     const params = useParams();
     const [selectedSucursal, setSelectedSucursal] = useState<string>("Todas");
     const [isMenuOpen, setIsMenuOpen] = useState(false);
-    
+
     // Parse the ID from params
     const categoryId = params?.id ? parseInt(params.id as string, 10) : null;
-    
+
     // Find the current category
     const category = categoriasData.find(cat => cat.id === categoryId);
 
@@ -65,7 +65,7 @@ export default function CategoryPage() {
                     {/* Action button */}
                     <div className="hidden md:block">
                         <Link
-                            href="/#test"
+                            href="/test"
                             className="inline-flex items-center justify-center px-5 py-2.5 rounded-full text-xs font-semibold uppercase tracking-wider transition-all duration-300 bg-utpRed border border-utpRed text-white hover:bg-utpDarkRed shadow-md"
                         >
                             Comenzar Test
@@ -96,7 +96,7 @@ export default function CategoryPage() {
                         <Link href="/#testimonios" onClick={toggleMenu} className="text-gray-800 text-base font-semibold hover:text-utpRed transition-colors">Testimonios</Link>
                         <Link href="/#faq" onClick={toggleMenu} className="text-gray-800 text-base font-semibold hover:text-utpRed transition-colors">Preguntas Frecuentes</Link>
                         <hr className="border-gray-100 my-2" />
-                        <Link href="/#test" onClick={toggleMenu} className="text-center bg-utpRed hover:bg-utpDarkRed text-white py-3 rounded-full text-sm font-semibold uppercase tracking-wider transition-all shadow-md">
+                        <Link href="/test" onClick={toggleMenu} className="text-center bg-utpRed hover:bg-utpDarkRed text-white py-3 rounded-full text-sm font-semibold uppercase tracking-wider transition-all shadow-md">
                             Comenzar Test →
                         </Link>
                     </div>
@@ -108,10 +108,10 @@ export default function CategoryPage() {
                 {/* Category Hero Banner */}
                 <section className="relative h-64 md:h-80 bg-charcoal overflow-hidden">
                     <div className="absolute inset-0 bg-gradient-to-r from-black/90 via-black/60 to-black/30 z-10"></div>
-                    <img 
-                        src={category.imagen} 
+                    <img
+                        src={category.imagen}
                         alt={category.nombre}
-                        className="absolute inset-0 w-full h-full object-cover object-center" 
+                        className="absolute inset-0 w-full h-full object-cover object-center"
                     />
                     <div className="relative z-20 max-w-7xl mx-auto px-6 lg:px-8 h-full flex flex-col justify-center text-white">
                         <div className="flex items-center gap-2 text-xs md:text-sm font-semibold text-red-400 uppercase tracking-widest mb-3">
@@ -132,7 +132,7 @@ export default function CategoryPage() {
                 {/* Filters and Careers Grid Section */}
                 <section className="max-w-7xl mx-auto px-6 lg:px-8 py-12 md:py-16">
                     <div className="flex flex-col lg:flex-row gap-8 items-start">
-                        
+
                         {/* Sidebar: Navigation to other Categories */}
                         <aside className="w-full lg:w-64 bg-white rounded-2xl p-6 shadow-sm border border-gray-100 flex-shrink-0">
                             <h3 className="text-sm font-bold text-gray-500 uppercase tracking-wider mb-4 border-b border-gray-100 pb-2">
@@ -145,11 +145,10 @@ export default function CategoryPage() {
                                         <Link
                                             key={cat.id}
                                             href={`/carreras/categoria/${cat.id}`}
-                                            className={`flex items-center justify-between px-3 py-2.5 rounded-lg text-sm font-medium transition-all ${
-                                                isCurrent
+                                            className={`flex items-center justify-between px-3 py-2.5 rounded-lg text-sm font-medium transition-all ${isCurrent
                                                     ? "bg-red-50 text-utpRed font-semibold"
                                                     : "text-gray-600 hover:bg-gray-50 hover:text-gray-900"
-                                            }`}
+                                                }`}
                                         >
                                             <span className="flex items-center gap-2 truncate">
                                                 <svg className={`w-4 h-4 flex-shrink-0 ${isCurrent ? "text-utpRed" : "text-gray-400"}`} fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2">
@@ -180,11 +179,10 @@ export default function CategoryPage() {
                                             <button
                                                 key={sucursal}
                                                 onClick={() => setSelectedSucursal(sucursal)}
-                                                className={`px-4 py-2 rounded-full text-xs font-semibold tracking-wide transition-all cursor-pointer ${
-                                                    isActive
+                                                className={`px-4 py-2 rounded-full text-xs font-semibold tracking-wide transition-all cursor-pointer ${isActive
                                                         ? "bg-utpRed text-white shadow-md shadow-red-500/20"
                                                         : "bg-gray-50 border border-gray-200 text-gray-600 hover:bg-gray-100"
-                                                }`}
+                                                    }`}
                                             >
                                                 {sucursal === "Todas" ? "Todas las sedes" : `Sede ${sucursal}`}
                                             </button>
@@ -234,7 +232,7 @@ export default function CategoryPage() {
                                                     <span className="text-[11px] font-bold text-gray-400 uppercase tracking-wider">
                                                         Duración: 5 años
                                                     </span>
-                                                    <Link 
+                                                    <Link
                                                         href={`/carreras/carrera/${carrera.id}`}
                                                         className="inline-flex items-center text-xs font-bold text-utpRed hover:text-utpDarkRed transition-colors cursor-pointer group/btn"
                                                     >

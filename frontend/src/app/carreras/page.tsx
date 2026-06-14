@@ -46,7 +46,7 @@ export default function CarrerasPage() {
                     {/* Action button */}
                     <div className="hidden md:block">
                         <Link
-                            href="/#test"
+                            href="/test"
                             className="inline-flex items-center justify-center px-5 py-2.5 rounded-full text-xs font-semibold uppercase tracking-wider transition-all duration-300 bg-utpRed border border-utpRed text-white hover:bg-utpDarkRed shadow-md"
                         >
                             Comenzar Test
@@ -77,7 +77,7 @@ export default function CarrerasPage() {
                         <Link href="/#testimonios" onClick={toggleMenu} className="text-gray-800 text-base font-semibold hover:text-utpRed transition-colors">Testimonios</Link>
                         <Link href="/#faq" onClick={toggleMenu} className="text-gray-800 text-base font-semibold hover:text-utpRed transition-colors">Preguntas Frecuentes</Link>
                         <hr className="border-gray-100 my-2" />
-                        <Link href="/#test" onClick={toggleMenu} className="text-center bg-utpRed hover:bg-utpDarkRed text-white py-3 rounded-full text-sm font-semibold uppercase tracking-wider transition-all shadow-md">
+                        <Link href="/test" onClick={toggleMenu} className="text-center bg-utpRed hover:bg-utpDarkRed text-white py-3 rounded-full text-sm font-semibold uppercase tracking-wider transition-all shadow-md">
                             Comenzar Test →
                         </Link>
                     </div>
@@ -90,7 +90,7 @@ export default function CarrerasPage() {
                 <section className="relative bg-charcoal py-20 overflow-hidden text-center">
                     <div className="absolute top-0 right-0 w-80 h-80 bg-red-900/10 rounded-full blur-3xl pointer-events-none"></div>
                     <div className="absolute bottom-0 left-0 w-80 h-80 bg-blue-900/5 rounded-full blur-3xl pointer-events-none"></div>
-                    
+
                     <div className="relative z-10 max-w-4xl mx-auto px-6">
                         <p className="text-xs md:text-sm font-semibold tracking-widest text-red-500 uppercase mb-3">CATÁLOGO COMPLETO</p>
                         <h1 className="text-4xl md:text-6xl font-black text-white font-serif mb-6 leading-tight">
@@ -114,11 +114,10 @@ export default function CarrerasPage() {
                             <div className="flex flex-wrap gap-2">
                                 <button
                                     onClick={() => setSelectedCategory("Todas")}
-                                    className={`px-4 py-2.5 rounded-xl text-xs font-semibold tracking-wide transition-all cursor-pointer ${
-                                        selectedCategory === "Todas"
+                                    className={`px-4 py-2.5 rounded-xl text-xs font-semibold tracking-wide transition-all cursor-pointer ${selectedCategory === "Todas"
                                             ? "bg-utpRed text-white shadow-md shadow-red-500/20"
                                             : "bg-gray-50 border border-gray-200 text-gray-600 hover:bg-gray-100"
-                                    }`}
+                                        }`}
                                 >
                                     Todas las áreas
                                 </button>
@@ -128,11 +127,10 @@ export default function CarrerasPage() {
                                         <button
                                             key={cat.id}
                                             onClick={() => setSelectedCategory(cat.id)}
-                                            className={`px-4 py-2.5 rounded-xl text-xs font-semibold tracking-wide transition-all flex items-center gap-2 cursor-pointer ${
-                                                isActive
+                                            className={`px-4 py-2.5 rounded-xl text-xs font-semibold tracking-wide transition-all flex items-center gap-2 cursor-pointer ${isActive
                                                     ? "bg-utpRed text-white shadow-md shadow-red-500/20"
                                                     : "bg-gray-50 border border-gray-200 text-gray-600 hover:bg-gray-100"
-                                            }`}
+                                                }`}
                                         >
                                             <svg className={`w-3.5 h-3.5 ${isActive ? "text-white" : "text-gray-400"}`} fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2.5">
                                                 <path strokeLinecap="round" strokeLinejoin="round" d={cat.svgPath} />
@@ -158,11 +156,10 @@ export default function CarrerasPage() {
                                         <button
                                             key={sucursal}
                                             onClick={() => setSelectedSucursal(sucursal)}
-                                            className={`px-4 py-2.5 rounded-xl text-xs font-semibold tracking-wide transition-all cursor-pointer ${
-                                                isActive
+                                            className={`px-4 py-2.5 rounded-xl text-xs font-semibold tracking-wide transition-all cursor-pointer ${isActive
                                                     ? "bg-utpRed text-white shadow-md shadow-red-500/20"
                                                     : "bg-gray-50 border border-gray-200 text-gray-600 hover:bg-gray-100"
-                                            }`}
+                                                }`}
                                         >
                                             {sucursal === "Todas" ? "Todas las sedes" : `Sede ${sucursal}`}
                                         </button>
