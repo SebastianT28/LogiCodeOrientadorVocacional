@@ -103,10 +103,10 @@ export default function CarreraDetailPage() {
                 {/* Career Hero Banner */}
                 <section className="relative h-[320px] md:h-[400px] bg-charcoal overflow-hidden flex items-end pb-12">
                     <div className="absolute inset-0 bg-gradient-to-t from-charcoal via-charcoal/70 to-black/30 z-10"></div>
-                    <img 
-                        src={career.imagen} 
+                    <img
+                        src={career.imagen}
                         alt={career.nombre}
-                        className="absolute inset-0 w-full h-full object-cover object-center transform scale-100 transition-transform duration-1000" 
+                        className="absolute inset-0 w-full h-full object-cover object-center transform scale-100 transition-transform duration-1000"
                     />
                     <div className="relative z-20 max-w-7xl mx-auto px-6 lg:px-8 w-full text-white">
                         {/* Breadcrumbs */}
@@ -208,7 +208,7 @@ export default function CarreraDetailPage() {
                                         <div key={idx} className="relative pl-12 flex flex-col md:flex-row md:items-start gap-4">
                                             {/* Timeline dot */}
                                             <div className="absolute left-3.5 top-1 w-5.5 h-5.5 rounded-full border-4 border-white bg-utpRed shadow-md flex items-center justify-center"></div>
-                                            
+
                                             {/* Cycle header */}
                                             <div className="flex-shrink-0 md:w-28 text-sm font-bold text-utpRed uppercase tracking-wider pt-0.5">
                                                 {cicloObj.ciclo}
@@ -217,8 +217,8 @@ export default function CarreraDetailPage() {
                                             {/* Courses list */}
                                             <div className="flex-grow bg-slateLight rounded-2xl p-4 border border-gray-100 flex flex-wrap gap-2">
                                                 {cicloObj.cursos.map((curso, cIdx) => (
-                                                    <span 
-                                                        key={cIdx} 
+                                                    <span
+                                                        key={cIdx}
                                                         className="bg-white border border-gray-200/60 rounded-xl px-3 py-1.5 text-xs text-gray-700 font-medium hover:border-utpRed hover:text-utpRed transition-colors shadow-xs"
                                                     >
                                                         {curso}
@@ -272,8 +272,8 @@ export default function CarreraDetailPage() {
                                 <p className="text-white/80 text-xs md:text-sm font-light mb-6 leading-relaxed max-w-xs">
                                     Resuelve tus dudas realizando nuestro test vocacional gratuito en solo 15 minutos.
                                 </p>
-                                <Link 
-                                    href="/test" 
+                                <Link
+                                    href="/test"
                                     className="w-full bg-white hover:bg-gray-100 text-utpRed font-bold py-3.5 rounded-full text-xs uppercase tracking-wider transition-colors shadow-md block"
                                 >
                                     Realizar Test Vocacional
@@ -281,8 +281,8 @@ export default function CarreraDetailPage() {
                             </div>
 
                             {/* Back Button */}
-                            <Link 
-                                href={`/carreras/categoria/${category.id}`} 
+                            <Link
+                                href={`/carreras/categoria/${category.id}`}
                                 className="w-full bg-white hover:bg-gray-50 border border-gray-200 text-gray-700 font-bold py-3.5 rounded-2xl text-xs uppercase tracking-wider transition-all text-center block"
                             >
                                 Volver a {category.nombre}

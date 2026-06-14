@@ -71,8 +71,8 @@ export default function Page() {
               href="/test"
               id="header-cta"
               className={`inline-flex items-center justify-center px-5 py-2.5 rounded-full text-xs font-semibold uppercase tracking-wider transition-all duration-300 shadow-md ${isScrolled
-                  ? "bg-utpRed border border-utpRed text-white hover:bg-utpDarkRed hover:text-white"
-                  : "bg-transparent border border-white hover:bg-white hover:text-utpRed text-white"
+                ? "bg-utpRed border border-utpRed text-white hover:bg-utpDarkRed hover:text-white"
+                : "bg-transparent border border-white hover:bg-white hover:text-utpRed text-white"
                 }`}
             >
               Comenzar Test
