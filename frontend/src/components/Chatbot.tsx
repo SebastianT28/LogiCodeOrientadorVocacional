@@ -13,6 +13,7 @@ export default function Chatbot() {
     const [chatHistory, setChatHistory] = useState<ChatMessage[]>([]);
     const [loading, setLoading] = useState(false);
     const [sesionId, setSesionId] = useState<string | null>(null);
+    const [faqList, setFaqList] = useState<{ textoPregunta: string; textoRespuesta?: string }[]>([]);
     const scrollRef = useRef<HTMLDivElement>(null);
 
     useEffect(() => {
@@ -22,6 +23,19 @@ export default function Chatbot() {
     }, [chatHistory, isOpen]);
 
     useEffect(() => {
+        const fetchFAQs = async () => {
+            try {
+                const apiUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8080';
+                const res = await fetch(`${apiUrl}/api/chatbot/preguntas-frecuentes`);
+                if (res.ok) {
+                    const data = await res.json();
+                    setFaqList(data);
+                }
+            } catch (error) {
+                console.error("Error al cargar preguntas frecuentes:", error);
+            }
+        };
+
         const initSession = async () => {
             let token = localStorage.getItem("orienta_token");
             if (!token) {
@@ -44,16 +58,22 @@ export default function Chatbot() {
                     const historyRes = await fetch(`${apiUrl}/api/chatbot/sesion/${sesion.id}/mensajes`);
                     if (historyRes.ok) {
                         const mensajes = await historyRes.json();
+                        const formattedHistory: ChatMessage[] = [];
+
+                        // Siempre insertar el mensaje de bienvenida al inicio para mostrar FAQs
+                        formattedHistory.push({ sender: 'bot', text: "Hola, soy Nora. Puedo ayudarte a explorar carreras y orientarte vocacionalmente. ¿En qué te puedo ayudar?" });
+
                         if (mensajes && mensajes.length > 0) {
-                            const formattedHistory: ChatMessage[] = [];
                             mensajes.forEach((m: any) => {
-                                formattedHistory.push({ sender: 'user', text: m.contenidoUsuario });
-                                formattedHistory.push({ sender: 'bot', text: m.respuestaBot });
+                                if (m.contenidoUsuario) {
+                                    formattedHistory.push({ sender: 'user', text: String(m.contenidoUsuario) });
+                                }
+                                if (m.respuestaBot) {
+                                    formattedHistory.push({ sender: 'bot', text: String(m.respuestaBot) });
+                                }
                             });
-                            setChatHistory(formattedHistory);
-                        } else {
-                            setChatHistory([{ sender: "bot", text: "Hola, soy Nora. Puedo ayudarte a explorar carreras y orientarte vocacionalmente. ¿En qué te puedo ayudar?" }]);
                         }
+                        setChatHistory(formattedHistory);
                     }
                 }
             } catch (error) {
@@ -62,27 +82,60 @@ export default function Chatbot() {
             }
         };
 
+        fetchFAQs();
         initSession();
     }, []);
 
-    const handleSend = async () => {
-        if (!message.trim() || loading) return;
-        
-        const userMessage = message.trim();
+    const handleSendFAQ = async (faq: { textoPregunta: string; textoRespuesta?: string }) => {
+        if (loading) return;
+
+        // Si la pregunta tiene una respuesta en BD, usarla directamente
+        if (faq.textoRespuesta) {
+            setChatHistory(prev => [
+                ...prev,
+                { sender: "user", text: faq.textoPregunta },
+                { sender: "bot", text: faq.textoRespuesta! }
+            ]);
+
+            if (sesionId) {
+                try {
+                    const apiUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8080';
+                    await fetch(`${apiUrl}/api/chatbot/sesion/${sesionId}/mensajes`, {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ mensajeUsuario: faq.textoPregunta, respuestaBot: faq.textoRespuesta })
+                    });
+                } catch (error) {
+                    console.error("Error guardando FAQ en BD:", error);
+                }
+            }
+        } else {
+            // Si no tiene respuesta, enviarla a la IA de Gemini
+            handleSend(faq.textoPregunta);
+        }
+    };
+
+    const handleSend = async (overrideMessage?: string) => {
+        const textToSend = typeof overrideMessage === 'string' ? overrideMessage : message;
+        if (!textToSend.trim() || loading) return;
+
         setMessage("");
-        setChatHistory(prev => [...prev, { sender: "user", text: userMessage }]);
+        setChatHistory(prev => [...prev, { sender: "user", text: textToSend }]);
         setLoading(true);
 
         try {
-            const geminiHistory = chatHistory.map(msg => ({
-                role: msg.sender === 'user' ? 'user' : 'model',
-                text: msg.text
-            }));
+            // Filtrar el mensaje de bienvenida por defecto y evitar nulos
+            const geminiHistory = chatHistory
+                .filter(msg => msg.text && msg.text !== "Hola, soy Nora. Puedo ayudarte a explorar carreras y orientarte vocacionalmente. ¿En qué te puedo ayudar?")
+                .map(msg => ({
+                    role: msg.sender === 'user' ? 'user' : 'model',
+                    text: String(msg.text)
+                }));
 
             const res = await fetch('/api/chat', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ message: userMessage, history: geminiHistory })
+                body: JSON.stringify({ message: textToSend, history: geminiHistory })
             });
 
             const data = await res.json();
@@ -95,7 +148,7 @@ export default function Chatbot() {
                 await fetch(`${apiUrl}/api/chatbot/sesion/${sesionId}/mensajes`, {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ mensajeUsuario: userMessage, respuestaBot: botReply })
+                    body: JSON.stringify({ mensajeUsuario: textToSend, respuestaBot: botReply })
                 });
             }
 
@@ -132,10 +185,26 @@ export default function Chatbot() {
 
                     <div ref={scrollRef} className="flex-1 p-4 overflow-y-auto flex flex-col gap-4">
                         {chatHistory.map((msg, idx) => (
-                            <div key={idx} className={`flex ${msg.sender === 'user' ? 'justify-end' : 'justify-start'}`}>
-                                <div className={`max-w-[85%] px-4 py-3 text-sm shadow-sm ${msg.sender === 'user' ? 'bg-utpRed text-white rounded-2xl rounded-br-none' : 'bg-white text-gray-800 rounded-2xl rounded-tl-none border border-gray-100'}`}>
-                                    {msg.text}
+                            <div key={idx} className="flex flex-col gap-2">
+                                <div className={`flex ${msg.sender === 'user' ? 'justify-end' : 'justify-start'}`}>
+                                    <div className={`max-w-[85%] px-4 py-3 text-sm shadow-sm ${msg.sender === 'user' ? 'bg-utpRed text-white rounded-2xl rounded-br-none' : 'bg-white text-gray-800 rounded-2xl rounded-tl-none border border-gray-100'}`}>
+                                        {msg.text}
+                                    </div>
                                 </div>
+                                {/* Flujo de preguntas frecuentes sugeridas en el saludo inicial */}
+                                {idx === 0 && msg.sender === 'bot' && faqList.length > 0 && (
+                                    <div className="flex flex-wrap gap-2 mt-1 ml-1">
+                                        {faqList.map((faq, i) => (
+                                            <button
+                                                key={i}
+                                                onClick={() => handleSendFAQ(faq)}
+                                                className="bg-red-50 text-utpRed text-[11px] font-semibold px-3 py-1.5 rounded-full border border-red-100 hover:bg-utpRed hover:text-white transition-colors text-left"
+                                            >
+                                                {faq.textoPregunta}
+                                            </button>
+                                        ))}
+                                    </div>
+                                )}
                             </div>
                         ))}
                         {loading && (
@@ -159,8 +228,8 @@ export default function Chatbot() {
                             onKeyDown={(e) => e.key === 'Enter' && handleSend()}
                             disabled={loading}
                         />
-                        <button 
-                            onClick={handleSend}
+                        <button
+                            onClick={() => handleSend()}
                             disabled={loading}
                             className="w-11 h-11 bg-utpRed rounded-xl flex items-center justify-center text-white hover:bg-utpDarkRed transition-colors shadow-md flex-shrink-0 disabled:opacity-50"
                             aria-label="Enviar mensaje"

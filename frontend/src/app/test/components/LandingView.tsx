@@ -1,5 +1,3 @@
-'use client';
-
 import Link from 'next/link';
 
 interface LandingViewProps {
@@ -8,11 +6,11 @@ interface LandingViewProps {
 
 export default function LandingView({ onStart }: LandingViewProps) {
   return (
-    <div className="min-h-screen bg-[#F5F5F5]">
-      {/* NAV */}
-      <nav className="bg-white border-b border-[#E0E0E0] px-8 h-16 flex items-center justify-between sticky top-0 z-50 shadow-sm">
-        <Link href="/" className="flex items-center gap-2.5 group">
-          <div className="w-9 h-9 bg-[#8B1E1E] rounded-[10px] flex items-center justify-center text-lg">🎓</div>
+    <div className="min-h-screen bg-[#FDFDFD]">
+      {/* NAVBAR */}
+      <nav className="h-16 border-b border-[#E0E0E0] px-6 flex items-center justify-between bg-white sticky top-0 z-40">
+        <Link href="/" className="flex items-center gap-2 transition-opacity hover:opacity-80">
+          <div className="w-8 h-8 bg-[#8B1E1E] text-white rounded-lg flex items-center justify-center font-bold text-sm">LC</div>
           <span className="font-poppins font-semibold text-[1.05rem] text-[#1C1C1C]">Orientación Vocacional</span>
         </Link>
         <span className="bg-[#FDF0F0] text-[#8B1E1E] text-xs font-semibold px-3 py-1 rounded-full tracking-wide">Test Oficial</span>
