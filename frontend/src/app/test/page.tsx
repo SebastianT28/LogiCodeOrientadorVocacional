@@ -51,12 +51,25 @@ export default function TestPage() {
         if (q.type === 'likert') {
             const val = (typeof ans === 'number' ? ans : 3);
             const mapping: Record<number, string> = {
-                0: 'ing', 1: 'arq', 2: 'sal', 4: 'com',
-                5: 'ing', 6: 'com', 7: 'sal',
-                10: 'com', 11: 'ing', 13: 'neg', 14: 'arq',
-                15: 'sal', 17: 'der', 19: 'edu',
-                20: 'neg', 22: 'neg', 24: 'edu',
-                25: 'ing', 28: 'sal'
+                0: 'ing',   // Sistemas y procesos
+                1: 'arq',   // Artístico y visual
+                2: 'sal',   // Biología y medicina
+                4: 'com',   // Fenómenos sociales
+                5: 'ing',   // Matemáticas y física
+                6: 'com',   // Comunicación
+                7: 'sal',   // Escuchar con empatía
+                10: 'neg',  // Trabajo en equipo/Liderazgo
+                11: 'ing',  // Metódico
+                13: 'der',  // Estructura y rutinas
+                14: 'arq',  // Imágenes y diseños
+                15: 'sal',  // Impacto en vida y bienestar
+                17: 'der',  // Justicia y ética
+                19: 'edu',  // Aprendizaje continuo
+                20: 'neg',  // Plazos ajustados y presión
+                22: 'neg',  // Emprender negocio
+                24: 'edu',  // Publicar conocimiento
+                25: 'der',  // Oficina estructurada
+                28: 'sal'   // Contacto con pacientes/clientes
             };
             const area = mapping[qi];
             if (area) newScores[area] += val;
