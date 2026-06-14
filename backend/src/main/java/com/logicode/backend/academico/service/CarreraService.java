@@ -7,4 +7,5 @@ import java.util.List;
 public interface CarreraService {
     List<CarreraDTO> getAllCarreras();
     CarreraDTO getCarreraById(Integer id);
+    List<CarreraDTO> getCarrerasRecomendadas(String codigoArea);
 }

@@ -21,4 +21,5 @@ public class CarreraDTO {
     private String imagen;
     private List<String> sucursales;
     private List<String> campoLaboral;
+    private List<MallaCurricularDTO> mallaCurricular;
 }

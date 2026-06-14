@@ -29,4 +29,9 @@ public class CarreraController {
         }
         return ResponseEntity.notFound().build();
     }
+
+    @GetMapping("/recomendadas/{codigoArea}")
+    public ResponseEntity<List<CarreraDTO>> getCarrerasRecomendadas(@PathVariable String codigoArea) {
+        return ResponseEntity.ok(carreraService.getCarrerasRecomendadas(codigoArea));
+    }
 }
