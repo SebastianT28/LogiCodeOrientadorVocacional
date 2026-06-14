@@ -5,6 +5,8 @@
   --color-utpDarkRed: #A30D24;
   --color-charcoal: #0F111A;
   --color-slateLight: #F9FAFB;
+  --color-white: #FFFFFF;
+  --color-grayText: #666666;
 
   --font-sans: var(--font-outfit), ui-sans-serif, system-ui, sans-serif;
   --font-serif: var(--font-playfair), ui-serif, Georgia, serif;
