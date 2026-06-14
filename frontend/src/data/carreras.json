@@ -48,7 +48,7 @@
     "nombre": "Ingeniería Civil",
     "categoriaId": 1,
     "sucursales": ["Arequipa"],
-    "imagen": "https://images.unsplash.com/photo-1581094288338-2314dddb7ecc?auto=format&fit=crop&q=80&w=600",
+    "imagen": "https://images.unsplash.com/photo-1565008447742-97f6f38c985c?auto=format&fit=crop&q=80&w=600",
     "descripcion": "Planifica, diseña y gestiona infraestructuras civiles modernas, seguras y respetuosas con el medio ambiente.",
     "perfilEgresado": "Profesional capaz de dirigir obras de construcción, realizar cálculos estructurales complejos e implementar planes de ordenamiento territorial.",
     "campoLaboral": [
@@ -334,7 +334,7 @@
     "nombre": "Diseño Gráfico",
     "categoriaId": 5,
     "sucursales": ["Lima"],
-    "imagen": "https://images.unsplash.com/photo-1561070791-26c113006238?auto=format&fit=crop&q=80&w=600",
+    "imagen": "https://images.unsplash.com/photo-1626785774573-4b799315345d?auto=format&fit=crop&q=80&w=600",
     "descripcion": "Expresa ideas visuales a través de medios digitales e impresos con innovación, estética e impacto comercial.",
     "perfilEgresado": "Diseñador creativo idóneo en branding, diagramación digital, ilustración publicitaria, interfaces web y producción multimedia interactiva.",
     "campoLaboral": [
