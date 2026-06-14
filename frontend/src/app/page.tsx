@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
+import Link from "next/link";
 import Chatbot from "@/components/Chatbot";
 import categoriasData from "@/data/categorias.json";
 
@@ -66,8 +67,8 @@ export default function Page() {
 
           {/* Botón de Acción Desktop */}
           <div className="hidden md:block">
-            <a
-              href="#test"
+            <Link
+              href="/test"
               id="header-cta"
               className={`inline-flex items-center justify-center px-5 py-2.5 rounded-full text-xs font-semibold uppercase tracking-wider transition-all duration-300 shadow-md ${isScrolled
                   ? "bg-utpRed border border-utpRed text-white hover:bg-utpDarkRed hover:text-white"
@@ -75,7 +76,7 @@ export default function Page() {
                 }`}
             >
               Comenzar Test
-            </a>
+            </Link>
           </div>
 
           {/* Botón Menú Hamburguesa Móvil */}
@@ -108,9 +109,9 @@ export default function Page() {
           <a href="#testimonios" onClick={toggleMenu} className="mobile-link text-white text-base font-semibold hover:text-utpRed transition-colors">Testimonios</a>
           <a href="#faq" onClick={toggleMenu} className="mobile-link text-white text-base font-semibold hover:text-utpRed transition-colors">Preguntas Frecuentes</a>
           <hr className="border-white/10 my-2" />
-          <a href="#test" onClick={toggleMenu} className="mobile-link text-center bg-utpRed hover:bg-utpDarkRed text-white py-3 rounded-full text-sm font-semibold uppercase tracking-wider transition-all shadow-md">
+          <Link href="/test" onClick={toggleMenu} className="mobile-link text-center bg-utpRed hover:bg-utpDarkRed text-white py-3 rounded-full text-sm font-semibold uppercase tracking-wider transition-all shadow-md">
             Comenzar Test →
-          </a>
+          </Link>
         </div>
       </header>
 
@@ -131,12 +132,12 @@ export default function Page() {
             </p>
 
             <div className="flex flex-col sm:flex-row gap-4">
-              <a href="#test" className="inline-flex items-center justify-center bg-utpRed hover:bg-white hover:text-utpRed text-white border border-white font-semibold px-8 py-3.5 rounded-full transition-all duration-300 shadow-lg group">
+              <Link href="/test" className="inline-flex items-center justify-center bg-utpRed hover:bg-white hover:text-utpRed text-white border border-white font-semibold px-8 py-3.5 rounded-full transition-all duration-300 shadow-lg group">
                 Comenzar ahora
                 <svg className="w-4 h-4 ml-2 transition-transform duration-300 group-hover:translate-x-1" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2.5">
                   <path strokeLinecap="round" strokeLinejoin="round" d="M14 5l7 7m0 0l-7 7m7-7H3" />
                 </svg>
-              </a>
+              </Link>
               <a href="#areas" className="inline-flex items-center justify-center bg-charcoal hover:bg-black border border-white/20 text-white font-semibold px-8 py-3.5 rounded-full transition-all duration-300 shadow-md">
                 Ver Carreras
               </a>

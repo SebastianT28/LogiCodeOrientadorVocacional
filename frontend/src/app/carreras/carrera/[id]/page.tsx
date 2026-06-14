@@ -60,7 +60,7 @@ export default function CarreraDetailPage() {
                     {/* Action button */}
                     <div className="hidden md:block">
                         <Link
-                            href="/#test"
+                            href="/test"
                             className="inline-flex items-center justify-center px-5 py-2.5 rounded-full text-xs font-semibold uppercase tracking-wider transition-all duration-300 bg-utpRed border border-utpRed text-white hover:bg-utpDarkRed shadow-md"
                         >
                             Comenzar Test
@@ -91,7 +91,7 @@ export default function CarreraDetailPage() {
                         <Link href="/#testimonios" onClick={toggleMenu} className="text-gray-800 text-base font-semibold hover:text-utpRed transition-colors">Testimonios</Link>
                         <Link href="/#faq" onClick={toggleMenu} className="text-gray-800 text-base font-semibold hover:text-utpRed transition-colors">Preguntas Frecuentes</Link>
                         <hr className="border-gray-100 my-2" />
-                        <Link href="/#test" onClick={toggleMenu} className="text-center bg-utpRed hover:bg-utpDarkRed text-white py-3 rounded-full text-sm font-semibold uppercase tracking-wider transition-all shadow-md">
+                        <Link href="/test" onClick={toggleMenu} className="text-center bg-utpRed hover:bg-utpDarkRed text-white py-3 rounded-full text-sm font-semibold uppercase tracking-wider transition-all shadow-md">
                             Comenzar Test →
                         </Link>
                     </div>
@@ -273,7 +273,7 @@ export default function CarreraDetailPage() {
                                     Resuelve tus dudas realizando nuestro test vocacional gratuito en solo 15 minutos.
                                 </p>
                                 <Link 
-                                    href="/#test" 
+                                    href="/test" 
                                     className="w-full bg-white hover:bg-gray-100 text-utpRed font-bold py-3.5 rounded-full text-xs uppercase tracking-wider transition-colors shadow-md block"
                                 >
                                     Realizar Test Vocacional
