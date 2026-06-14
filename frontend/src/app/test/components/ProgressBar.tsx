@@ -27,8 +27,8 @@ export default function ProgressBar({ currentQ, totalQ }: ProgressBarProps) {
             
             <div className="flex gap-1 mt-1.5">
                 {CATEGORIES.map((c, i) => {
-                    const start = i * 10;
-                    const end = start + 10;
+                    const start = i * 5;
+                    const end = start + 5;
                     let bgColor = 'bg-[#E8E8E8]';
                     if (currentQ >= end) {
                         bgColor = 'bg-utpRed';

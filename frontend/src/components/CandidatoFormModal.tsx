@@ -57,7 +57,7 @@ export default function CandidatoFormModal({ onClose, onSuccess }: CandidatoForm
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm px-4">
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-[#5C1111]/80 backdrop-blur-sm px-4">
       <div className="bg-white rounded-2xl w-full max-w-md p-6 shadow-2xl animate-fade-in-up relative">
         <button
           onClick={onClose}
@@ -69,7 +69,7 @@ export default function CandidatoFormModal({ onClose, onSuccess }: CandidatoForm
         </button>
         
         <div className="mb-6">
-          <h2 className="text-2xl font-bold font-poppins text-[#1C1C1C]">Regístrate para comenzar</h2>
+          <h2 className="text-2xl font-bold font-poppins text-[#5C1111]">Regístrate para comenzar</h2>
           <p className="text-gray-500 text-sm mt-1">
             Déjanos tus datos para enviarte los resultados y ayudarte en tu orientación vocacional.
           </p>

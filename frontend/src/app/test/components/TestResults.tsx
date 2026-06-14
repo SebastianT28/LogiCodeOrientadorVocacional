@@ -459,9 +459,12 @@ export default function TestResults({ scores, onRestart }: TestResultsProps) {
                 </div>
             </div>
 
-            <h2 className="font-poppins text-[1.3rem] font-bold text-[#1C1C1C] mb-4 flex items-center gap-2">
+            <h2 className="font-poppins text-[1.3rem] font-bold text-[#1C1C1C] mb-2 flex items-center gap-2">
                 <Trophy className="w-6 h-6 text-utpRed" /> Top 5 carreras recomendadas
             </h2>
+            <p className="text-[1.05rem] font-medium text-[#1C1C1C] mb-6">
+                ¡Genial! Según tus resultados, haces un match perfecto con esta área. Aquí tienes el Top 5 de carreras que mejor encajan contigo.
+            </p>
             <div className="flex flex-col gap-3 mb-8">
                 {currentStats.top5.map(([key, pct], idx) => {
                     const faculty = CAREERS[key];
@@ -490,7 +493,11 @@ export default function TestResults({ scores, onRestart }: TestResultsProps) {
                                     <div className="flex-1 sm:hidden h-1.5 bg-[#E8E8E8] rounded-full overflow-hidden w-24">
                                         <div className="h-full bg-utpRed rounded-full" style={{ width: `${pct}%` }}></div>
                                     </div>
-                                    <div className="font-poppins font-bold text-[1.1rem] text-utpRed bg-[#FDF0F0] px-3 py-1.5 rounded-lg whitespace-nowrap">
+                                    <div className={`font-poppins font-bold text-[1.1rem] px-3 py-1.5 rounded-lg whitespace-nowrap transition-colors
+                                        ${idx === 0 ? 'bg-utpRed text-white border border-utpRed shadow-sm' : 
+                                          idx < 3 ? 'bg-[#FDF0F0] text-utpDarkRed border border-[#FDF0F0]' : 
+                                          'bg-[#FFFAF5] text-[#A87B66] border border-[#F2E8DF] shadow-sm'}
+                                    `}>
                                         {pct}% Afinidad
                                     </div>
                                 </div>
@@ -506,33 +513,7 @@ export default function TestResults({ scores, onRestart }: TestResultsProps) {
                 })}
             </div>
 
-            <div className="bg-white rounded-2xl p-7 shadow-[0_2px_12px_rgba(139,30,30,0.08)] border border-[#E0E0E0] mb-12">
-                <div className="font-poppins text-[0.95rem] font-bold text-[#1C1C1C] mb-5 flex items-center gap-2">
-                    <div className="w-8 h-8 bg-[#FDF0F0] text-utpRed rounded-lg flex items-center justify-center">
-                        <Landmark className="w-5 h-5" />
-                    </div>
-                    Distribución por facultades
-                </div>
-                <div className="flex flex-col gap-3">
-                    {currentStats.sorted.map(([key, pct]) => {
-                        const faculty = CAREERS[key];
-                        if (!faculty) return null;
-                        return (
-                            <div key={key} className="flex items-center gap-3">
-                                <div className="text-[0.82rem] font-medium text-gray-500 min-w-[120px] sm:min-w-[160px] truncate flex items-center gap-1.5">
-                                    {faculty.emoji} {fullAreaNames[key] || faculty.name}
-                                </div>
-                                <div className="flex-1 h-2.5 bg-[#E8E8E8] rounded-full overflow-hidden">
-                                    <div className="h-full bg-gradient-to-r from-utpDarkRed to-[#B83232] rounded-full transition-all duration-1000" style={{ width: `${pct}%` }}></div>
-                                </div>
-                                <div className="text-[0.82rem] font-bold text-utpRed min-w-[36px] text-right">
-                                    {pct}%
-                                </div>
-                            </div>
-                        );
-                    })}
-                </div>
-            </div>
+
 
             {/* Bottom Actions */}
             <div className="flex justify-center gap-4 flex-wrap pb-12">

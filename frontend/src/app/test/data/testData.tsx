@@ -67,12 +67,10 @@ export const CATEGORIES: Category[] = [
 ];
 
 export const QUESTIONS: Question[] = [
-  // INTERESES (Q1-10)
+  // INTERESES (Q0-4)
   { cat: 'intereses', type: 'likert', text: 'Me apasiona entender cómo funcionan los sistemas, los procesos y las estructuras de manera profunda.' },
   { cat: 'intereses', type: 'likert', text: 'Disfruto explorar ideas artísticas y crear cosas visualmente atractivas o expresivas.' },
   { cat: 'intereses', type: 'likert', text: 'Me interesa la biología, la medicina y todo lo relacionado con el cuerpo humano y la salud.' },
-  { cat: 'intereses', type: 'likert', text: 'Leo noticias de negocios, economía o emprendimiento y encuentro esos temas genuinamente emocionantes.' },
-  { cat: 'intereses', type: 'likert', text: 'Me atrae el derecho, la justicia y las cuestiones éticas de la sociedad.' },
   {
     cat: 'intereses', type: 'scenario', text: 'Si pudieras elegir cómo pasar un sábado aprendiendo algo nuevo, ¿qué elegirías?',
     opts: [
@@ -83,11 +81,8 @@ export const QUESTIONS: Question[] = [
     ], scores: { A: 'ing', B: 'arq', C: 'der', D: 'neg' }
   },
   { cat: 'intereses', type: 'likert', text: 'Los fenómenos sociales, culturales y la comunicación humana me generan mucha curiosidad.' },
-  { cat: 'intereses', type: 'likert', text: 'Me interesan la enseñanza, la pedagogía y los procesos de aprendizaje.' },
-  { cat: 'intereses', type: 'likert', text: 'Disfruto analizar datos, patrones y sacar conclusiones lógicas a partir de información.' },
-  { cat: 'intereses', type: 'likert', text: 'La política y los cambios sociales son temas que sigo y que me generan opiniones sólidas.' },
 
-  // HABILIDADES (Q11-20)
+  // HABILIDADES (Q5-9)
   { cat: 'habilidades', type: 'likert', text: 'Se me facilita comprender y aplicar conceptos matemáticos o de física sin mucho esfuerzo.' },
   { cat: 'habilidades', type: 'likert', text: 'Tengo facilidad para comunicarme verbalmente y por escrito de forma clara y persuasiva.' },
   { cat: 'habilidades', type: 'likert', text: 'Puedo escuchar con empatía y ayudar a otros a procesar emociones o problemas.' },
@@ -96,10 +91,6 @@ export const QUESTIONS: Question[] = [
     opts: ['Análisis lógico', 'Creatividad', 'Empatía y escucha', 'Liderazgo', 'Investigación'],
     maps: ['ing', 'arq', 'sal', 'neg', 'der']
   },
-  { cat: 'habilidades', type: 'likert', text: 'Me destaco organizando equipos, delegando tareas y motivando a las personas.' },
-  { cat: 'habilidades', type: 'likert', text: 'Tengo habilidad para diseñar visualmente: composición, colores, proporciones y espacios.' },
-  { cat: 'habilidades', type: 'likert', text: 'Aprendo nuevas tecnologías digitales con facilidad y rapidez.' },
-  { cat: 'habilidades', type: 'likert', text: 'Soy bueno/a investigando, leyendo literatura académica y redactando de forma formal.' },
   {
     cat: 'habilidades', type: 'scenario', text: 'Tu equipo tiene un problema urgente. ¿Cuál es tu rol natural?',
     opts: [
@@ -109,12 +100,10 @@ export const QUESTIONS: Question[] = [
       { l: 'D', t: 'Organizo las tareas y pongo en marcha el plan' },
     ], scores: { A: 'ing', B: 'der', C: 'arq', D: 'neg' }
   },
-  { cat: 'habilidades', type: 'likert', text: 'Se me da bien enseñar: explico conceptos difíciles de manera simple y paciente.' },
 
-  // PERSONALIDAD (Q21-30)
+  // PERSONALIDAD (Q10-14)
   { cat: 'personalidad', type: 'likert', text: 'Prefiero trabajar en equipo a trabajar solo/a; el intercambio de ideas me energiza.' },
   { cat: 'personalidad', type: 'likert', text: 'Soy detallista y metódico/a: prefiero hacer las cosas bien aunque tome más tiempo.' },
-  { cat: 'personalidad', type: 'likert', text: 'Me adapto fácilmente a los cambios; la incertidumbre no me genera ansiedad sino oportunidad.' },
   {
     cat: 'personalidad', type: 'scenario', text: '¿Cómo tomas decisiones importantes?',
     opts: [
@@ -124,14 +113,10 @@ export const QUESTIONS: Question[] = [
       { l: 'D', t: 'Evalúo pros y contras pero actúo rápido' },
     ], scores: { A: 'ing', B: 'arq', C: 'edu', D: 'neg' }
   },
-  { cat: 'personalidad', type: 'likert', text: 'Me gustan los retos intelectuales que requieren mucho análisis y pensamiento crítico.' },
-  { cat: 'personalidad', type: 'likert', text: 'Busco ambientes de trabajo que sean dinámicos, con variedad y contacto con muchas personas.' },
   { cat: 'personalidad', type: 'likert', text: 'Valoro la estabilidad y la estructura; me siento más cómodo/a con rutinas claras.' },
-  { cat: 'personalidad', type: 'likert', text: 'Tengo tendencia a ser curioso/a y explorar ideas fuera del área de mi especialidad.' },
-  { cat: 'personalidad', type: 'likert', text: 'Disfruto de posiciones de liderazgo y tomar decisiones que afectan a otros.' },
   { cat: 'personalidad', type: 'likert', text: 'Soy una persona que se expresa mejor con imágenes, diseños o proyectos visuales que con palabras.' },
 
-  // VALORES (Q31-40)
+  // VALORES (Q15-19)
   { cat: 'valores', type: 'likert', text: 'Quiero que mi trabajo tenga impacto directo en la vida y el bienestar de las personas.' },
   {
     cat: 'valores', type: 'ranking', text: 'Ordena lo que más valoras en tu vida profesional futura:',
@@ -139,9 +124,6 @@ export const QUESTIONS: Question[] = [
     maps: ['sal', 'neg', 'arq', 'ing', 'com']
   },
   { cat: 'valores', type: 'likert', text: 'Para mí, la justicia y la ética son principios no negociables en cualquier trabajo.' },
-  { cat: 'valores', type: 'likert', text: 'Me motiva crear cosas originales; la innovación es parte fundamental de lo que quiero hacer.' },
-  { cat: 'valores', type: 'likert', text: 'Valoro la posibilidad de tener libertad para gestionar mi tiempo y mis proyectos.' },
-  { cat: 'valores', type: 'likert', text: 'El dinero y la seguridad financiera son factores prioritarios al elegir carrera.' },
   {
     cat: 'valores', type: 'scenario', text: '¿Qué tipo de legado quieres dejar con tu trabajo?',
     opts: [
@@ -151,13 +133,10 @@ export const QUESTIONS: Question[] = [
       { l: 'D', t: 'Empresas o proyectos que generen empleo y prosperidad' },
     ], scores: { A: 'ing', B: 'der', C: 'arq', D: 'neg' }
   },
-  { cat: 'valores', type: 'likert', text: 'Quiero trabajar en un entorno que celebre la diversidad y la inclusión.' },
-  { cat: 'valores', type: 'likert', text: 'Me interesa formarme en el extranjero o trabajar con personas de otros países y culturas.' },
   { cat: 'valores', type: 'likert', text: 'El aprendizaje continuo y el crecimiento intelectual son más importantes que el status.' },
 
-  // MOTIVACIONES (Q41-50)
+  // MOTIVACIONES (Q20-24)
   { cat: 'motivaciones', type: 'likert', text: 'Me emocionan los proyectos con plazos ajustados y alta presión: el estrés me activa positivamente.' },
-  { cat: 'motivaciones', type: 'likert', text: 'Prefiero trabajar en problemas de largo aliento, con profundidad, antes que resolver muchas cosas a la vez.' },
   {
     cat: 'motivaciones', type: 'scenario', text: 'Imagina que hoy tienes que elegir un proyecto de voluntariado. ¿Cuál escogerías?',
     opts: [
@@ -168,19 +147,14 @@ export const QUESTIONS: Question[] = [
     ], scores: { A: 'edu', B: 'sal', C: 'arq', D: 'der' }
   },
   { cat: 'motivaciones', type: 'likert', text: 'La posibilidad de emprender mi propio negocio o startup es algo que me atrae profundamente.' },
-  { cat: 'motivaciones', type: 'likert', text: 'Prefiero trabajar para organizaciones con propósito social antes que para empresas puramente lucrativas.' },
-  { cat: 'motivaciones', type: 'likert', text: 'El reconocimiento público y la visibilidad son factores importantes para mi motivación.' },
-  { cat: 'motivaciones', type: 'likert', text: 'Me motiva más resolver un problema nuevo nunca antes visto que perfeccionar procesos existentes.' },
   {
     cat: 'motivaciones', type: 'ranking', text: 'Ordena estas situaciones de más a menos motivadora para ti:',
     opts: ['Publicar una investigación', 'Lanzar un producto al mercado', 'Ganar un caso legal', 'Curar a un paciente', 'Diseñar un edificio'],
     maps: ['edu', 'neg', 'der', 'sal', 'arq']
   },
   { cat: 'motivaciones', type: 'likert', text: 'Me motiva la idea de ser experto/a reconocido en mi campo y publicar conocimiento.' },
-  { cat: 'motivaciones', type: 'likert', text: 'Trabajar con niños, jóvenes o en contextos educativos es algo que genuinamente me llena.' },
-  { cat: 'motivaciones', type: 'likert', text: 'Me apasiona comunicar, contar historias y crear narrativas que conecten con la gente.' },
 
-  // ENTORNO LABORAL (Q51-60)
+  // ENTORNO LABORAL (Q25-29)
   { cat: 'entorno', type: 'likert', text: 'Prefiero trabajar en oficina estructurada antes que en lugares remotos o con mucha variabilidad de contexto.' },
   {
     cat: 'entorno', type: 'scenario', text: '¿En qué tipo de organización te imaginas trabajando a los 30 años?',
@@ -191,17 +165,12 @@ export const QUESTIONS: Question[] = [
       { l: 'D', t: 'Bufete de abogados o institución pública' },
     ], scores: { A: 'neg', B: 'sal', C: 'arq', D: 'der' }
   },
-  { cat: 'entorno', type: 'likert', text: 'Necesito un trabajo que me permita viajar frecuentemente o trabajar desde distintos lugares.' },
-  { cat: 'entorno', type: 'likert', text: 'Prefiero trabajar con objetos, máquinas o sistemas antes que con personas directamente.' },
-  { cat: 'entorno', type: 'likert', text: 'Me gustaría un entorno donde la investigación y la academia sean parte habitual del trabajo.' },
-  { cat: 'entorno', type: 'likert', text: 'Valoro los ambientes donde puedo colaborar en equipo y donde haya mucha comunicación horizontal.' },
   {
     cat: 'entorno', type: 'ranking', text: 'Ordena estos entornos de trabajo de más a menos ideal para ti:',
     opts: ['Laboratorio o campo técnico', 'Aula o institución educativa', 'Empresa o corporativo', 'Estudio de diseño o arte', 'Tribunal o institución legal'],
     maps: ['ing', 'edu', 'neg', 'arq', 'der']
   },
   { cat: 'entorno', type: 'likert', text: 'El contacto directo con pacientes, clientes o usuarios finales es algo que busco activamente.' },
-  { cat: 'entorno', type: 'likert', text: 'Me atrae la idea de trabajar en medios, producción audiovisual o marketing digital.' },
   {
     cat: 'entorno', type: 'scenario', text: '¿Qué aspecto de tu trabajo futuro consideras más importante?',
     opts: [
