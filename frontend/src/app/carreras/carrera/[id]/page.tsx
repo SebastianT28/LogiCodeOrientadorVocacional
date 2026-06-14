@@ -1,23 +1,105 @@
 "use client";
 
 import { useParams } from "next/navigation";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Link from "next/link";
-import categoriasData from "@/data/categorias.json";
-import carrerasData from "@/data/carreras.json";
+
+// Formato que devuelve el backend (plano: un registro por curso)
+interface MallaCurricularItem {
+    id: number;
+    carreraId: number;
+    ciclo: string;
+    curso: string;
+}
+
+// Formato que usa el UI (agrupado por ciclo)
+interface MallaCiclo {
+    ciclo: string;
+    cursos: string[];
+}
+
+// Agrupa los cursos planos del backend por ciclo para el UI
+function groupByCiclo(items: MallaCurricularItem[]): MallaCiclo[] {
+    const map = new Map<string, string[]>();
+    items.forEach(item => {
+        if (!map.has(item.ciclo)) map.set(item.ciclo, []);
+        map.get(item.ciclo)!.push(item.curso);
+    });
+    return Array.from(map.entries()).map(([ciclo, cursos]) => ({ ciclo, cursos }));
+}
+
+interface Carrera {
+    id: number;
+    categoriaId: number;
+    categoriaNombre: string;
+    nombre: string;
+    descripcion: string;
+    perfilEgresado: string;
+    imagen: string;
+    sucursales: string[];
+    campoLaboral: string[];
+    mallaCurricular: MallaCurricularItem[];
+}
+
+interface CarreraUI {
+    id: number;
+    categoriaId: number;
+    nombre: string;
+    descripcion: string;
+    perfilEgresado: string;
+    imagen: string;
+    sucursales: string[];
+    campoLaboral: string[];
+    mallaCurricular: MallaCiclo[];
+}
+
+interface Categoria {
+    id: number;
+    nombre: string;
+    svgPath: string;
+}
 
 export default function CarreraDetailPage() {
     const params = useParams();
     const [isMenuOpen, setIsMenuOpen] = useState(false);
+    const [career, setCareer] = useState<CarreraUI | null>(null);
+    const [category, setCategory] = useState<Categoria | null>(null);
+    const [loading, setLoading] = useState(true);
 
-    // Parse the ID from params
-    const careerId = params?.id ? parseInt(params.id as string, 10) : null;
+    const careerId = params?.id as string;
 
-    // Find current career
-    const career = carrerasData.find(c => c.id === careerId);
+    useEffect(() => {
+        if (!careerId) return;
+        const apiUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8080';
+        fetch(`${apiUrl}/api/carreras/${careerId}`)
+            .then(r => r.ok ? r.json() : null)
+            .then((data: Carrera | null) => {
+                if (data) {
+                    // Agrupar la malla curricular plana por ciclo para el UI
+                    const carreraUI: CarreraUI = {
+                        ...data,
+                        mallaCurricular: groupByCiclo(data.mallaCurricular || []),
+                    };
+                    setCareer(carreraUI);
+                    return fetch(`${apiUrl}/api/categorias/${data.categoriaId}`)
+                        .then(r => r.ok ? r.json() : null)
+                        .then(cat => setCategory(cat));
+                }
+            })
+            .catch(console.error)
+            .finally(() => setLoading(false));
+    }, [careerId]);
 
-    // Find its category
-    const category = career ? categoriasData.find(cat => cat.id === career.categoriaId) : null;
+    if (loading) {
+        return (
+            <div className="min-h-screen flex items-center justify-center bg-slateLight">
+                <div className="flex flex-col items-center gap-4">
+                    <div className="w-12 h-12 border-4 border-utpRed border-t-transparent rounded-full animate-spin"></div>
+                    <p className="text-gray-500 text-sm font-medium">Cargando carrera...</p>
+                </div>
+            </div>
+        );
+    }
 
     if (!career || !category) {
         return (
@@ -60,7 +142,7 @@ export default function CarreraDetailPage() {
                     {/* Action button */}
                     <div className="hidden md:block">
                         <Link
-                            href="/test-vocacional"
+                            href="/test"
                             className="inline-flex items-center justify-center px-5 py-2.5 rounded-full text-xs font-semibold uppercase tracking-wider transition-all duration-300 bg-utpRed border border-utpRed text-white hover:bg-utpDarkRed shadow-md"
                         >
                             Comenzar Test
@@ -91,7 +173,7 @@ export default function CarreraDetailPage() {
                         <Link href="/#testimonios" onClick={toggleMenu} className="text-gray-800 text-base font-semibold hover:text-utpRed transition-colors">Testimonios</Link>
                         <Link href="/#faq" onClick={toggleMenu} className="text-gray-800 text-base font-semibold hover:text-utpRed transition-colors">Preguntas Frecuentes</Link>
                         <hr className="border-gray-100 my-2" />
-                        <Link href="/test-vocacional" onClick={toggleMenu} className="text-center bg-utpRed hover:bg-utpDarkRed text-white py-3 rounded-full text-sm font-semibold uppercase tracking-wider transition-all shadow-md">
+                        <Link href="/test" onClick={toggleMenu} className="text-center bg-utpRed hover:bg-utpDarkRed text-white py-3 rounded-full text-sm font-semibold uppercase tracking-wider transition-all shadow-md">
                             Comenzar Test →
                         </Link>
                     </div>
@@ -273,7 +355,7 @@ export default function CarreraDetailPage() {
                                     Resuelve tus dudas realizando nuestro test vocacional gratuito en solo 15 minutos.
                                 </p>
                                 <Link
-                                    href="/test-vocacional"
+                                    href="/test"
                                     className="w-full bg-white hover:bg-gray-100 text-utpRed font-bold py-3.5 rounded-full text-xs uppercase tracking-wider transition-colors shadow-md block"
                                 >
                                     Realizar Test Vocacional

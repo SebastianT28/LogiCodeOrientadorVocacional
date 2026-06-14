@@ -1,17 +1,46 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Link from "next/link";
-import categoriasData from "@/data/categorias.json";
-import carrerasData from "@/data/carreras.json";
+
+interface Categoria {
+    id: number;
+    nombre: string;
+    imagen: string;
+    svgPath: string;
+}
+
+interface Carrera {
+    id: number;
+    categoriaId: number;
+    nombre: string;
+    descripcion: string;
+    imagen: string;
+    sucursales: string[];
+}
 
 export default function CarrerasPage() {
     const [selectedCategory, setSelectedCategory] = useState<number | "Todas">("Todas");
     const [selectedSucursal, setSelectedSucursal] = useState<string>("Todas");
     const [isMenuOpen, setIsMenuOpen] = useState(false);
+    const [categorias, setCategorias] = useState<Categoria[]>([]);
+    const [carreras, setCarreras] = useState<Carrera[]>([]);
+    const [loading, setLoading] = useState(true);
+
+    useEffect(() => {
+        const apiUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8080';
+        Promise.all([
+            fetch(`${apiUrl}/api/categorias`).then(r => r.json()),
+            fetch(`${apiUrl}/api/carreras`).then(r => r.json()),
+        ]).then(([cats, cars]) => {
+            setCategorias(cats);
+            setCarreras(cars);
+        }).catch(console.error)
+            .finally(() => setLoading(false));
+    }, []);
 
     // Filter careers by both category and sucursal
-    const filteredCareers = carrerasData.filter(carrera => {
+    const filteredCareers = carreras.filter(carrera => {
         const matchesCategory = selectedCategory === "Todas" || carrera.categoriaId === selectedCategory;
         const matchesSucursal = selectedSucursal === "Todas" || carrera.sucursales.includes(selectedSucursal);
         return matchesCategory && matchesSucursal;
@@ -20,6 +49,17 @@ export default function CarrerasPage() {
     const toggleMenu = () => {
         setIsMenuOpen(!isMenuOpen);
     };
+
+    if (loading) {
+        return (
+            <div className="min-h-screen flex items-center justify-center bg-slateLight">
+                <div className="flex flex-col items-center gap-4">
+                    <div className="w-12 h-12 border-4 border-utpRed border-t-transparent rounded-full animate-spin"></div>
+                    <p className="text-gray-500 text-sm font-medium">Cargando carreras...</p>
+                </div>
+            </div>
+        );
+    }
 
     return (
         <div className="min-h-screen bg-slateLight flex flex-col justify-between">
@@ -46,7 +86,7 @@ export default function CarrerasPage() {
                     {/* Action button */}
                     <div className="hidden md:block">
                         <Link
-                            href="/test-vocacional"
+                            href="/test"
                             className="inline-flex items-center justify-center px-5 py-2.5 rounded-full text-xs font-semibold uppercase tracking-wider transition-all duration-300 bg-utpRed border border-utpRed text-white hover:bg-utpDarkRed shadow-md"
                         >
                             Comenzar Test
@@ -77,7 +117,7 @@ export default function CarrerasPage() {
                         <Link href="/#testimonios" onClick={toggleMenu} className="text-gray-800 text-base font-semibold hover:text-utpRed transition-colors">Testimonios</Link>
                         <Link href="/#faq" onClick={toggleMenu} className="text-gray-800 text-base font-semibold hover:text-utpRed transition-colors">Preguntas Frecuentes</Link>
                         <hr className="border-gray-100 my-2" />
-                        <Link href="/test-vocacional" onClick={toggleMenu} className="text-center bg-utpRed hover:bg-utpDarkRed text-white py-3 rounded-full text-sm font-semibold uppercase tracking-wider transition-all shadow-md">
+                        <Link href="/test" onClick={toggleMenu} className="text-center bg-utpRed hover:bg-utpDarkRed text-white py-3 rounded-full text-sm font-semibold uppercase tracking-wider transition-all shadow-md">
                             Comenzar Test →
                         </Link>
                     </div>
@@ -115,21 +155,21 @@ export default function CarrerasPage() {
                                 <button
                                     onClick={() => setSelectedCategory("Todas")}
                                     className={`px-4 py-2.5 rounded-xl text-xs font-semibold tracking-wide transition-all cursor-pointer ${selectedCategory === "Todas"
-                                            ? "bg-utpRed text-white shadow-md shadow-red-500/20"
-                                            : "bg-gray-50 border border-gray-200 text-gray-600 hover:bg-gray-100"
+                                        ? "bg-utpRed text-white shadow-md shadow-red-500/20"
+                                        : "bg-gray-50 border border-gray-200 text-gray-600 hover:bg-gray-100"
                                         }`}
                                 >
                                     Todas las áreas
                                 </button>
-                                {categoriasData.map((cat) => {
+                                {categorias.map((cat) => {
                                     const isActive = selectedCategory === cat.id;
                                     return (
                                         <button
                                             key={cat.id}
                                             onClick={() => setSelectedCategory(cat.id)}
                                             className={`px-4 py-2.5 rounded-xl text-xs font-semibold tracking-wide transition-all flex items-center gap-2 cursor-pointer ${isActive
-                                                    ? "bg-utpRed text-white shadow-md shadow-red-500/20"
-                                                    : "bg-gray-50 border border-gray-200 text-gray-600 hover:bg-gray-100"
+                                                ? "bg-utpRed text-white shadow-md shadow-red-500/20"
+                                                : "bg-gray-50 border border-gray-200 text-gray-600 hover:bg-gray-100"
                                                 }`}
                                         >
                                             <svg className={`w-3.5 h-3.5 ${isActive ? "text-white" : "text-gray-400"}`} fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2.5">
@@ -157,8 +197,8 @@ export default function CarrerasPage() {
                                             key={sucursal}
                                             onClick={() => setSelectedSucursal(sucursal)}
                                             className={`px-4 py-2.5 rounded-xl text-xs font-semibold tracking-wide transition-all cursor-pointer ${isActive
-                                                    ? "bg-utpRed text-white shadow-md shadow-red-500/20"
-                                                    : "bg-gray-50 border border-gray-200 text-gray-600 hover:bg-gray-100"
+                                                ? "bg-utpRed text-white shadow-md shadow-red-500/20"
+                                                : "bg-gray-50 border border-gray-200 text-gray-600 hover:bg-gray-100"
                                                 }`}
                                         >
                                             {sucursal === "Todas" ? "Todas las sedes" : `Sede ${sucursal}`}
@@ -173,7 +213,7 @@ export default function CarrerasPage() {
                     {filteredCareers.length > 0 ? (
                         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
                             {filteredCareers.map((carrera) => {
-                                const categoryInfo = categoriasData.find(cat => cat.id === carrera.categoriaId);
+                                const categoryInfo = categorias.find(cat => cat.id === carrera.categoriaId);
                                 return (
                                     <div
                                         key={carrera.id}

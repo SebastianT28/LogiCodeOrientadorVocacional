@@ -1,16 +1,19 @@
 "use client";
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { QUESTIONS } from './data/testData';
 import ProgressBar from './components/ProgressBar';
 import QuestionCard from './components/QuestionCard';
 import LoadingScreen from './components/LoadingScreen';
 import TestResults from './components/TestResults';
+import CandidatoFormModal from '@/components/CandidatoFormModal';
+import LandingView from './components/LandingView';
 
-type Phase = 'test' | 'loading' | 'results';
+type Phase = 'landing' | 'test' | 'loading' | 'results';
 
 export default function TestPage() {
-    const [phase, setPhase] = useState<Phase>('test');
+    const [phase, setPhase] = useState<Phase>('landing');
+    const [showModal, setShowModal] = useState(false);
     const [currentQ, setCurrentQ] = useState(0);
     const [answers, setAnswers] = useState<Record<number, string | number>>({});
     const [scores, setScores] = useState<Record<string, number>>({
@@ -18,10 +21,20 @@ export default function TestPage() {
     });
 
     const handleRestart = () => {
-        setPhase('test');
+        setPhase('landing');
         setCurrentQ(0);
         setAnswers({});
         setScores({ ing: 0, neg: 0, der: 0, sal: 0, arq: 0, com: 0, edu: 0 });
+    };
+
+    const handleStartTestClick = () => {
+        setShowModal(true);
+    };
+
+    const handleModalSuccess = (id: string) => {
+        localStorage.setItem('candidatoId', id);
+        setShowModal(false);
+        setPhase('test');
     };
 
     const handleAnswer = (answer: string | number) => {
@@ -31,7 +44,7 @@ export default function TestPage() {
     const computeScore = (qi: number) => {
         const q = QUESTIONS[qi];
         const ans = answers[qi];
-        
+
         const newScores = { ...scores };
 
         if (q.type === 'likert') {
@@ -59,16 +72,13 @@ export default function TestPage() {
                 if (area) newScores[area] += 4;
             }
         } else if (q.type === 'ranking') {
-            // Simplificación: asume que se arrastró o se usó el orden base. 
-            // En un flujo real, 'ans' contendría el nuevo array o un estado interno del QuestionCard lo pasaría aquí.
-            // Para mantener fidelidad al HTML donde se lee el DOM, aquí simulamos el cálculo base:
             if (q.maps) {
                 q.maps.forEach((area, idx) => {
                     newScores[area] += (q.maps!.length - idx);
                 });
             }
         }
-        
+
         setScores(newScores);
     };
 
@@ -92,20 +102,32 @@ export default function TestPage() {
 
     return (
         <div className="min-h-screen bg-[#F5F5F5]">
+            {phase === 'landing' && (
+                <>
+                    <LandingView onStart={handleStartTestClick} />
+                    {showModal && (
+                        <CandidatoFormModal 
+                            onClose={() => setShowModal(false)}
+                            onSuccess={handleModalSuccess}
+                        />
+                    )}
+                </>
+            )}
+
             {phase === 'test' && (
                 <div className="max-w-[760px] mx-auto py-12 px-6 min-h-[calc(100vh-64px)] flex flex-col gap-8">
                     <ProgressBar currentQ={currentQ} totalQ={QUESTIONS.length} />
-                    
-                    <QuestionCard 
-                        question={QUESTIONS[currentQ]} 
-                        currentQ={currentQ} 
+
+                    <QuestionCard
+                        question={QUESTIONS[currentQ]}
+                        currentQ={currentQ}
                         totalQ={QUESTIONS.length}
                         currentAnswer={answers[currentQ]}
                         onAnswer={handleAnswer}
                     />
 
                     <div className="flex justify-between items-center gap-4 mt-4">
-                        <button 
+                        <button
                             onClick={() => {
                                 if (currentQ > 0) handlePrev();
                                 else window.location.href = '/';
@@ -120,7 +142,7 @@ export default function TestPage() {
                             {currentQ === 0 ? 'Regresar' : 'Anterior'}
                         </button>
 
-                        <button 
+                        <button
                             onClick={handleNext}
                             disabled={answers[currentQ] === undefined && QUESTIONS[currentQ].type !== 'ranking'}
                             className="flex items-center gap-2 bg-utpRed text-white border-none py-3 px-7 rounded-full font-poppins text-[0.95rem] font-semibold cursor-pointer transition-all duration-300 ml-auto disabled:bg-[#CCCCCC] disabled:cursor-not-allowed hover:not(:disabled):bg-utpDarkRed hover:not(:disabled):-translate-y-0.5"
@@ -135,7 +157,7 @@ export default function TestPage() {
             )}
 
             {phase === 'loading' && <LoadingScreen onComplete={() => setPhase('results')} />}
-            
+
             {phase === 'results' && <TestResults scores={scores} onRestart={handleRestart} />}
         </div>
     );

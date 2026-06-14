@@ -62,10 +62,10 @@ export async function POST(request: NextRequest) {
     }
 
     return NextResponse.json({ reply });
-  } catch (error) {
+  } catch (error: any) {
     console.error('[Nora/Gemini Error]', error);
     return NextResponse.json(
-      { reply: 'Disculpa, el servicio de orientación no está disponible en este momento. Por favor, intenta más tarde.' },
+      { reply: 'Disculpa, ocurrió un error: ' + (error.message || error.toString()) },
       { status: 500 }
     );
   }

@@ -13,13 +13,13 @@ import {
 } from 'chart.js';
 import { Radar, Bar } from 'react-chartjs-2';
 import { PROFILES, CAREERS } from '../data/testData';
-import { 
-    MessageCircle, 
-    Info, 
-    Hexagon, 
-    BarChart3, 
-    Landmark, 
-    RotateCcw, 
+import {
+    MessageCircle,
+    Info,
+    Hexagon,
+    BarChart3,
+    Landmark,
+    RotateCcw,
     Home,
     Trophy,
     MapPin,
@@ -67,7 +67,7 @@ export default function TestResults({ scores, onRestart }: TestResultsProps) {
     const [view, setView] = useState<'current' | 'history' | 'compare'>('current');
     const [history, setHistory] = useState<HistoryItem[]>([]);
     const [compareId, setCompareId] = useState<string | null>(null);
-    
+
     const calculateStats = (inputScores: Record<string, number>) => {
         const total = Object.values(inputScores).reduce((a, b) => a + b, 0) || 1;
         const pcts: Record<string, number> = {};
@@ -108,15 +108,15 @@ export default function TestResults({ scores, onRestart }: TestResultsProps) {
         // Save current result to history
         const savedHistory = localStorage.getItem('vocationalHistory');
         let parsedHistory: HistoryItem[] = savedHistory ? JSON.parse(savedHistory) : [];
-        
+
         // Prevent duplicate saves on strict mode double render by checking latest entry
-        const isDuplicate = parsedHistory.length > 0 && 
+        const isDuplicate = parsedHistory.length > 0 &&
             JSON.stringify(parsedHistory[0].scores) === JSON.stringify(scores);
 
         if (!isDuplicate) {
             const newItem: HistoryItem = {
                 id: Date.now().toString(),
-                date: new Date().toLocaleDateString('es-PE', { day: '2-digit', month: 'short', year: 'numeric', hour: '2-digit', minute:'2-digit' }),
+                date: new Date().toLocaleDateString('es-PE', { day: '2-digit', month: 'short', year: 'numeric', hour: '2-digit', minute: '2-digit' }),
                 scores,
                 topKey: currentStats.topKey,
                 top5: currentStats.top5.map(([k, p]) => ({ key: k, pct: p })),
@@ -129,7 +129,7 @@ export default function TestResults({ scores, onRestart }: TestResultsProps) {
             localStorage.setItem('vocationalHistory', JSON.stringify(parsedHistory));
         }
         setHistory(parsedHistory);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
     const handleDownloadPDF = () => {
@@ -191,11 +191,11 @@ export default function TestResults({ scores, onRestart }: TestResultsProps) {
         }
     };
 
-    const areaNames: Record<string, string> = { 
-        ing: 'Ingeniería', neg: 'Negocios', der: 'Derecho', sal: 'Salud', 
-        arq: 'Arquitectura', com: 'Comunicación', edu: 'Educación' 
+    const areaNames: Record<string, string> = {
+        ing: 'Ingeniería', neg: 'Negocios', der: 'Derecho', sal: 'Salud',
+        arq: 'Arquitectura', com: 'Comunicación', edu: 'Educación'
     };
-    
+
     const barData = {
         labels: currentStats.sorted.map(([k]) => areaNames[k]),
         datasets: [
@@ -214,18 +214,18 @@ export default function TestResults({ scores, onRestart }: TestResultsProps) {
         maintainAspectRatio: false,
         plugins: { legend: { display: false } },
         scales: {
-            x: { 
-                grid: { color: 'rgba(0,0,0,0.04)' }, 
+            x: {
+                grid: { color: 'rgba(0,0,0,0.04)' },
                 ticks: { font: { size: 11 }, callback: (v: any) => v + '%' },
-                max: Math.max(...currentStats.sorted.map(([,v]) => v)) + 10
+                max: Math.max(...currentStats.sorted.map(([, v]) => v)) + 10
             },
             y: { grid: { display: false }, ticks: { font: { size: 11 } } }
         }
     };
 
-    const fullAreaNames: Record<string, string> = { 
-        ing: 'Ingeniería', neg: 'Negocios', der: 'Derecho y CC. HH.', sal: 'Ciencias de la Salud', 
-        arq: 'Arquitectura y Diseño', com: 'Comunicaciones', edu: 'Educación' 
+    const fullAreaNames: Record<string, string> = {
+        ing: 'Ingeniería', neg: 'Negocios', der: 'Derecho y CC. HH.', sal: 'Ciencias de la Salud',
+        arq: 'Arquitectura y Diseño', com: 'Comunicaciones', edu: 'Educación'
     };
 
     if (view === 'compare' && compareId) {
@@ -237,7 +237,7 @@ export default function TestResults({ scores, onRestart }: TestResultsProps) {
 
         return (
             <div className="w-full max-w-[1100px] mx-auto py-8 px-6 animate-[fadeIn_0.5s_ease]">
-                <button 
+                <button
                     onClick={() => setView('history')}
                     className="flex items-center gap-2 text-utpRed font-semibold mb-6 hover:-translate-x-1 transition-transform"
                 >
@@ -255,13 +255,13 @@ export default function TestResults({ scores, onRestart }: TestResultsProps) {
                         <h2 className="text-sm font-bold text-gray-500 mb-2 uppercase tracking-wider">Intento Actual</h2>
                         <div className="text-2xl font-bold font-poppins text-[#1C1C1C] mb-4">{profileA.name}</div>
                         <div className="flex flex-wrap gap-2 mb-6">
-                            {profileA.tags.slice(0,3).map(t => (
+                            {profileA.tags.slice(0, 3).map(t => (
                                 <span key={t} className="text-xs bg-[#FDF0F0] text-utpRed px-2 py-1 rounded-md font-medium">{t}</span>
                             ))}
                         </div>
                         <h3 className="font-bold mb-3">Top 3 Carreras</h3>
                         <div className="flex flex-col gap-2">
-                            {currentStats.top5.slice(0,3).map(([k, p]) => (
+                            {currentStats.top5.slice(0, 3).map(([k, p]) => (
                                 <div key={k} className="flex justify-between text-sm bg-gray-50 p-2 rounded-lg">
                                     <span className="font-medium text-gray-700">{CAREERS[k].careers[0].name}</span>
                                     <span className="text-utpRed font-bold">{p}%</span>
@@ -276,13 +276,13 @@ export default function TestResults({ scores, onRestart }: TestResultsProps) {
                         <h2 className="text-sm font-bold text-gray-500 mb-2 uppercase tracking-wider">Intento del {compareItem.date}</h2>
                         <div className="text-2xl font-bold font-poppins text-[#1C1C1C] mb-4">{profileB.name}</div>
                         <div className="flex flex-wrap gap-2 mb-6">
-                            {profileB.tags.slice(0,3).map(t => (
+                            {profileB.tags.slice(0, 3).map(t => (
                                 <span key={t} className="text-xs bg-gray-100 text-gray-600 px-2 py-1 rounded-md font-medium">{t}</span>
                             ))}
                         </div>
                         <h3 className="font-bold mb-3">Top 3 Carreras</h3>
                         <div className="flex flex-col gap-2">
-                            {compareItem.top5.slice(0,3).map(c => (
+                            {compareItem.top5.slice(0, 3).map(c => (
                                 <div key={c.key} className="flex justify-between text-sm bg-gray-50 p-2 rounded-lg">
                                     <span className="font-medium text-gray-700">{CAREERS[c.key].careers[0].name}</span>
                                     <span className="text-gray-600 font-bold">{c.pct}%</span>
@@ -293,8 +293,8 @@ export default function TestResults({ scores, onRestart }: TestResultsProps) {
                 </div>
 
                 <div className="bg-[#FDF0F0] p-6 rounded-2xl text-utpDarkRed text-center max-w-2xl mx-auto">
-                    {currentStats.topKey === compareItem.topKey ? 
-                        "¡Tu perfil se mantiene consistente! Tus intereses están bien definidos hacia " + profileA.name + "." : 
+                    {currentStats.topKey === compareItem.topKey ?
+                        "¡Tu perfil se mantiene consistente! Tus intereses están bien definidos hacia " + profileA.name + "." :
                         "Tus intereses han evolucionado. Es normal que diferentes momentos de evaluación destaquen diferentes aspectos de tu personalidad."
                     }
                 </div>
@@ -305,7 +305,7 @@ export default function TestResults({ scores, onRestart }: TestResultsProps) {
     if (view === 'history') {
         return (
             <div className="w-full max-w-[1100px] mx-auto py-8 px-6 animate-[fadeIn_0.5s_ease]">
-                <button 
+                <button
                     onClick={() => setView('current')}
                     className="flex items-center gap-2 text-utpRed font-semibold mb-6 hover:-translate-x-1 transition-transform"
                 >
@@ -324,7 +324,7 @@ export default function TestResults({ scores, onRestart }: TestResultsProps) {
                                     <div className="text-gray-500 text-sm mb-1">{item.date} {isCurrent && <span className="ml-2 text-xs bg-[#FDF0F0] text-utpRed px-2 py-0.5 rounded-full font-bold">Último / Actual</span>}</div>
                                     <div className="text-xl font-bold font-poppins text-[#1C1C1C] mb-2">{itemProfile.name}</div>
                                     <div className="flex gap-2 flex-wrap">
-                                        {item.top5.slice(0,3).map((c) => (
+                                        {item.top5.slice(0, 3).map((c) => (
                                             <span key={c.key} className="text-xs bg-gray-100 text-gray-700 px-2 py-1 rounded-md">
                                                 {CAREERS[c.key].careers[0].name} ({c.pct}%)
                                             </span>
@@ -333,7 +333,7 @@ export default function TestResults({ scores, onRestart }: TestResultsProps) {
                                 </div>
                                 <div className="flex gap-3 w-full md:w-auto">
                                     {!isCurrent && (
-                                        <button 
+                                        <button
                                             onClick={() => {
                                                 setCompareId(item.id);
                                                 setView('compare');
@@ -343,7 +343,7 @@ export default function TestResults({ scores, onRestart }: TestResultsProps) {
                                             <History className="w-4 h-4" /> Comparar
                                         </button>
                                     )}
-                                    <button 
+                                    <button
                                         onClick={() => handleDownloadHistoryPDF(item)}
                                         className="flex-1 md:flex-none flex items-center justify-center gap-2 bg-[#F5F5F5] hover:bg-[#EAEAEA] text-[#1C1C1C] py-2 px-4 rounded-lg font-semibold transition-colors"
                                     >
@@ -367,7 +367,7 @@ export default function TestResults({ scores, onRestart }: TestResultsProps) {
             <div className="bg-gradient-to-br from-utpDarkRed to-utpRed rounded-[24px] p-10 text-white mb-8 relative overflow-hidden flex flex-col md:flex-row justify-between items-start md:items-center">
                 <div className="absolute -top-10 -right-10 w-[200px] h-[200px] bg-white/5 rounded-full"></div>
                 <div className="absolute -bottom-16 left-[30%] w-[280px] h-[280px] bg-white/5 rounded-full"></div>
-                
+
                 <div className="relative z-10">
                     <p className="text-[0.78rem] font-bold tracking-[0.12em] uppercase opacity-70 mb-2">
                         Tu perfil vocacional principal
@@ -388,13 +388,13 @@ export default function TestResults({ scores, onRestart }: TestResultsProps) {
                 </div>
 
                 <div className="relative z-10 mt-6 md:mt-0 flex flex-col gap-3">
-                    <button 
+                    <button
                         onClick={handleDownloadPDF}
                         className="flex items-center justify-center gap-2 bg-white text-utpRed py-3 px-6 rounded-full font-bold transition-all hover:bg-gray-100 shadow-md"
                     >
                         <Download className="w-4 h-4" /> Descargar PDF
                     </button>
-                    <button 
+                    <button
                         onClick={() => setView('history')}
                         className="flex items-center justify-center gap-2 bg-white/10 text-white border border-white/20 py-3 px-6 rounded-full font-bold transition-all hover:bg-white/20"
                     >
@@ -445,7 +445,7 @@ export default function TestResults({ scores, onRestart }: TestResultsProps) {
                         <Radar data={radarData} options={radarOptions} />
                     </div>
                 </div>
-                
+
                 <div className="bg-white rounded-2xl p-7 shadow-[0_2px_12px_rgba(139,30,30,0.08)] border border-[#E0E0E0]">
                     <div className="font-poppins text-[0.95rem] font-bold text-[#1C1C1C] mb-5 flex items-center gap-2">
                         <div className="w-8 h-8 bg-[#FDF0F0] text-utpRed rounded-lg flex items-center justify-center">
@@ -468,7 +468,7 @@ export default function TestResults({ scores, onRestart }: TestResultsProps) {
                     if (!faculty) return null;
                     const career = faculty.careers[0];
                     const rankColors = ['bg-utpRed', 'bg-[#A30D24]', 'bg-[#B83232]', 'bg-[#CC4444]', 'bg-[#DD6666]'];
-                    
+
                     return (
                         <div key={key} className="bg-white rounded-2xl p-5 flex flex-col sm:flex-row items-start sm:items-center gap-4 shadow-[0_2px_12px_rgba(139,30,30,0.08)] border border-[#E0E0E0] transition-all duration-300 hover:border-utpRed group">
                             <div className={`min-w-[36px] h-[36px] ${rankColors[idx] || 'bg-gray-400'} text-white rounded-full flex items-center justify-center font-poppins font-bold text-[0.9rem]`}>
@@ -494,7 +494,7 @@ export default function TestResults({ scores, onRestart }: TestResultsProps) {
                                         {pct}% Afinidad
                                     </div>
                                 </div>
-                                <Link 
+                                <Link
                                     href={`/carreras/carrera/${career.id}`}
                                     className="flex items-center justify-center gap-1.5 text-sm font-semibold text-utpRed bg-white border border-utpRed py-1.5 px-4 rounded-lg transition-all hover:bg-utpRed hover:text-white group/btn"
                                 >
@@ -536,13 +536,13 @@ export default function TestResults({ scores, onRestart }: TestResultsProps) {
 
             {/* Bottom Actions */}
             <div className="flex justify-center gap-4 flex-wrap pb-12">
-                <button 
+                <button
                     onClick={onRestart}
                     className="inline-flex items-center gap-2 bg-white border-2 border-utpRed text-utpRed py-3 px-6 rounded-full font-poppins text-[0.9rem] font-semibold transition-all hover:bg-utpRed hover:text-white"
                 >
                     <RotateCcw className="w-4 h-4" /> Repetir el test
                 </button>
-                <a 
+                <a
                     href="/"
                     className="inline-flex items-center gap-2 bg-utpRed text-white py-3 px-6 rounded-full font-poppins text-[0.9rem] font-semibold transition-all hover:bg-utpDarkRed hover:-translate-y-0.5"
                 >

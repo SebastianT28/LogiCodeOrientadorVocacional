@@ -1,21 +1,61 @@
 "use client";
 
 import { useParams } from "next/navigation";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Link from "next/link";
-import categoriasData from "@/data/categorias.json";
-import carrerasData from "@/data/carreras.json";
+
+interface Categoria {
+    id: number;
+    nombre: string;
+    imagen: string;
+    svgPath: string;
+}
+
+interface Carrera {
+    id: number;
+    categoriaId: number;
+    nombre: string;
+    descripcion: string;
+    imagen: string;
+    sucursales: string[];
+}
 
 export default function CategoryPage() {
     const params = useParams();
     const [selectedSucursal, setSelectedSucursal] = useState<string>("Todas");
     const [isMenuOpen, setIsMenuOpen] = useState(false);
+    const [category, setCategory] = useState<Categoria | null>(null);
+    const [categorias, setCategorias] = useState<Categoria[]>([]);
+    const [carreras, setCarreras] = useState<Carrera[]>([]);
+    const [loading, setLoading] = useState(true);
 
-    // Parse the ID from params
-    const categoryId = params?.id ? parseInt(params.id as string, 10) : null;
+    const categoryId = params?.id as string;
 
-    // Find the current category
-    const category = categoriasData.find(cat => cat.id === categoryId);
+    useEffect(() => {
+        if (!categoryId) return;
+        const apiUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8080';
+        Promise.all([
+            fetch(`${apiUrl}/api/categorias/${categoryId}`).then(r => r.ok ? r.json() : null),
+            fetch(`${apiUrl}/api/categorias`).then(r => r.json()),
+            fetch(`${apiUrl}/api/carreras`).then(r => r.json()),
+        ]).then(([cat, cats, cars]) => {
+            setCategory(cat);
+            setCategorias(cats);
+            setCarreras(cars);
+        }).catch(console.error)
+          .finally(() => setLoading(false));
+    }, [categoryId]);
+
+    if (loading) {
+        return (
+            <div className="min-h-screen flex items-center justify-center bg-slateLight">
+                <div className="flex flex-col items-center gap-4">
+                    <div className="w-12 h-12 border-4 border-utpRed border-t-transparent rounded-full animate-spin"></div>
+                    <p className="text-gray-500 text-sm font-medium">Cargando área...</p>
+                </div>
+            </div>
+        );
+    }
 
     if (!category) {
         return (
@@ -30,8 +70,8 @@ export default function CategoryPage() {
     }
 
     // Filter careers by category and selected sucursal
-    const filteredCareers = carrerasData.filter(carrera => {
-        const matchesCategory = carrera.categoriaId === category.id;
+    const filteredCareers = carreras.filter(carrera => {
+        const matchesCategory = carrera.categoriaId === parseInt(categoryId);
         const matchesSucursal = selectedSucursal === "Todas" || carrera.sucursales.includes(selectedSucursal);
         return matchesCategory && matchesSucursal;
     });
@@ -65,7 +105,7 @@ export default function CategoryPage() {
                     {/* Action button */}
                     <div className="hidden md:block">
                         <Link
-                            href="/test-vocacional"
+                            href="/test"
                             className="inline-flex items-center justify-center px-5 py-2.5 rounded-full text-xs font-semibold uppercase tracking-wider transition-all duration-300 bg-utpRed border border-utpRed text-white hover:bg-utpDarkRed shadow-md"
                         >
                             Comenzar Test
@@ -96,7 +136,7 @@ export default function CategoryPage() {
                         <Link href="/#testimonios" onClick={toggleMenu} className="text-gray-800 text-base font-semibold hover:text-utpRed transition-colors">Testimonios</Link>
                         <Link href="/#faq" onClick={toggleMenu} className="text-gray-800 text-base font-semibold hover:text-utpRed transition-colors">Preguntas Frecuentes</Link>
                         <hr className="border-gray-100 my-2" />
-                        <Link href="/test-vocacional" onClick={toggleMenu} className="text-center bg-utpRed hover:bg-utpDarkRed text-white py-3 rounded-full text-sm font-semibold uppercase tracking-wider transition-all shadow-md">
+                        <Link href="/test" onClick={toggleMenu} className="text-center bg-utpRed hover:bg-utpDarkRed text-white py-3 rounded-full text-sm font-semibold uppercase tracking-wider transition-all shadow-md">
                             Comenzar Test →
                         </Link>
                     </div>
@@ -139,7 +179,7 @@ export default function CategoryPage() {
                                 Otras Áreas
                             </h3>
                             <div className="flex flex-col space-y-1">
-                                {categoriasData.map((cat) => {
+                                {categorias.map((cat) => {
                                     const isCurrent = cat.id === category.id;
                                     return (
                                         <Link
