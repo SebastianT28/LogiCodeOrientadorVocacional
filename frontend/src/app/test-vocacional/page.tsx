@@ -5,6 +5,7 @@ import LandingView from './components/LandingView';
 import QuestionView from './components/QuestionView';
 import LoadingView from './components/LoadingView';
 import ResultsView from './components/ResultsView';
+import CandidatoFormModal from '@/components/CandidatoFormModal';
 import {
   QUESTIONS,
   SCORE_MAPPING,
@@ -22,6 +23,7 @@ export default function TestVocacionalPage() {
   const [currentQ, setCurrentQ] = useState(0);
   const [answers, setAnswers] = useState<Record<number, number | string>>({});
   const [scores, setScores] = useState<Scores>({ ...INITIAL_SCORES });
+  const [showModal, setShowModal] = useState(false);
 
   /* ---- Scoring ---- */
   const computeScore = useCallback((qi: number, newAnswers: Record<number, number | string>): Scores => {
@@ -91,6 +93,16 @@ export default function TestVocacionalPage() {
     setStep('test');
   }, []);
 
+  const handleLandingStartClick = useCallback(() => {
+    setShowModal(true);
+  }, []);
+
+  const handleModalSuccess = useCallback((candidatoId: string) => {
+    localStorage.setItem('candidatoId', candidatoId);
+    setShowModal(false);
+    handleStart();
+  }, [handleStart]);
+
   const handleGoHome = useCallback(() => {
     setStep('landing');
     setCurrentQ(0);
@@ -99,7 +111,19 @@ export default function TestVocacionalPage() {
   }, []);
 
   /* ---- Render ---- */
-  if (step === 'landing') return <LandingView onStart={handleStart} />;
+  if (step === 'landing') {
+    return (
+      <>
+        <LandingView onStart={handleLandingStartClick} />
+        {showModal && (
+          <CandidatoFormModal 
+            onClose={() => setShowModal(false)}
+            onSuccess={handleModalSuccess}
+          />
+        )}
+      </>
+    );
+  }
 
   if (step === 'test')
     return (
