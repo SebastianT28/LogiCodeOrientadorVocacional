@@ -38,6 +38,7 @@ export interface Question {
 }
 
 export interface Career {
+  id: string | number;
   name: string;
   sede: string;
 }
@@ -217,73 +218,73 @@ export const CAREERS: Record<string, Faculty> = {
     name: 'Ingeniería',
     emoji: <Cpu className="w-4 h-4 inline-block -mt-0.5" />,
     careers: [
-      { name: 'Ingeniería de Sistemas e Informática', sede: 'Lima · Arequipa' },
-      { name: 'Ingeniería Industrial', sede: 'Lima · Arequipa' },
-      { name: 'Ingeniería Civil', sede: 'Lima · Arequipa' },
-      { name: 'Ingeniería Electrónica', sede: 'Lima' },
-      { name: 'Ingeniería de Minas', sede: 'Arequipa' },
+      { id: 101, name: 'Ingeniería de Sistemas e Informática', sede: 'Lima · Arequipa' },
+      { id: 104, name: 'Ingeniería Industrial', sede: 'Lima · Arequipa' },
+      { id: 103, name: 'Ingeniería Civil', sede: 'Lima · Arequipa' },
+      { id: 102, name: 'Ingeniería Electrónica', sede: 'Lima' },
+      { id: 105, name: 'Ingeniería de Minas', sede: 'Arequipa' },
     ]
   },
   neg: {
     name: 'Negocios',
     emoji: <Briefcase className="w-4 h-4 inline-block -mt-0.5" />,
     careers: [
-      { name: 'Administración de Empresas', sede: 'Lima · Arequipa' },
-      { name: 'Contabilidad y Finanzas', sede: 'Lima · Arequipa' },
-      { name: 'Marketing y Dirección Comercial', sede: 'Lima · Arequipa' },
-      { name: 'Negocios Internacionales', sede: 'Lima' },
-      { name: 'Economía', sede: 'Lima · Arequipa' },
+      { id: 401, name: 'Administración de Empresas', sede: 'Lima · Arequipa' },
+      { id: 402, name: 'Contabilidad y Finanzas', sede: 'Lima · Arequipa' },
+      { id: 403, name: 'Marketing y Dirección Comercial', sede: 'Lima · Arequipa' },
+      { id: 404, name: 'Negocios Internacionales', sede: 'Lima' },
+      { id: 405, name: 'Economía', sede: 'Lima · Arequipa' },
     ]
   },
   der: {
     name: 'Derecho y Ciencias Humanas',
     emoji: <Scale className="w-4 h-4 inline-block -mt-0.5" />,
     careers: [
-      { name: 'Derecho', sede: 'Lima · Arequipa' },
-      { name: 'Psicología', sede: 'Lima · Arequipa' },
-      { name: 'Trabajo Social', sede: 'Lima' },
-      { name: 'Filosofía', sede: 'Lima' },
+      { id: 301, name: 'Derecho', sede: 'Lima · Arequipa' },
+      { id: 203, name: 'Psicología', sede: 'Lima · Arequipa' },
+      { id: 304, name: 'Trabajo Social', sede: 'Lima' },
+      { id: 305, name: 'Filosofía', sede: 'Lima' },
     ]
   },
   sal: {
     name: 'Ciencias de la Salud',
     emoji: <HeartPulse className="w-4 h-4 inline-block -mt-0.5" />,
     careers: [
-      { name: 'Medicina Humana', sede: 'Lima · Arequipa' },
-      { name: 'Enfermería', sede: 'Lima · Arequipa' },
-      { name: 'Odontología', sede: 'Lima · Arequipa' },
-      { name: 'Nutrición y Dietética', sede: 'Lima' },
-      { name: 'Farmacia y Bioquímica', sede: 'Lima · Arequipa' },
+      { id: 201, name: 'Medicina Humana', sede: 'Lima · Arequipa' },
+      { id: 202, name: 'Enfermería', sede: 'Lima · Arequipa' },
+      { id: 204, name: 'Odontología', sede: 'Lima · Arequipa' },
+      { id: 205, name: 'Nutrición y Dietética', sede: 'Lima' },
+      { id: 206, name: 'Farmacia y Bioquímica', sede: 'Lima · Arequipa' },
     ]
   },
   arq: {
     name: 'Arquitectura y Diseño',
     emoji: <Layers className="w-4 h-4 inline-block -mt-0.5" />,
     careers: [
-      { name: 'Arquitectura', sede: 'Lima · Arequipa' },
-      { name: 'Diseño Gráfico Empresarial', sede: 'Lima · Arequipa' },
-      { name: 'Diseño de Interiores', sede: 'Lima' },
-      { name: 'Diseño Industrial', sede: 'Lima' },
+      { id: 502, name: 'Arquitectura', sede: 'Lima · Arequipa' },
+      { id: 501, name: 'Diseño Gráfico Empresarial', sede: 'Lima · Arequipa' },
+      { id: 504, name: 'Diseño de Interiores', sede: 'Lima' },
+      { id: 505, name: 'Diseño Industrial', sede: 'Lima' },
     ]
   },
   com: {
     name: 'Comunicaciones',
     emoji: <Radio className="w-4 h-4 inline-block -mt-0.5" />,
     careers: [
-      { name: 'Ciencias de la Comunicación', sede: 'Lima · Arequipa' },
-      { name: 'Periodismo', sede: 'Lima' },
-      { name: 'Publicidad y Multimedia', sede: 'Lima · Arequipa' },
-      { name: 'Comunicación Audiovisual', sede: 'Lima' },
+      { id: 303, name: 'Ciencias de la Comunicación', sede: 'Lima · Arequipa' },
+      { id: 306, name: 'Periodismo', sede: 'Lima' },
+      { id: 307, name: 'Publicidad y Multimedia', sede: 'Lima · Arequipa' },
+      { id: 308, name: 'Comunicación Audiovisual', sede: 'Lima' },
     ]
   },
   edu: {
     name: 'Educación',
     emoji: <BookOpen className="w-4 h-4 inline-block -mt-0.5" />,
     careers: [
-      { name: 'Educación Inicial', sede: 'Lima · Arequipa' },
-      { name: 'Educación Primaria', sede: 'Lima · Arequipa' },
-      { name: 'Educación Secundaria', sede: 'Lima · Arequipa' },
-      { name: 'Educación Especial', sede: 'Lima' },
+      { id: 503, name: 'Educación Inicial', sede: 'Lima · Arequipa' },
+      { id: 506, name: 'Educación Primaria', sede: 'Lima · Arequipa' },
+      { id: 507, name: 'Educación Secundaria', sede: 'Lima · Arequipa' },
+      { id: 508, name: 'Educación Especial', sede: 'Lima' },
     ]
   }
 };
